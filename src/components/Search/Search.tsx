@@ -1,55 +1,36 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import styles from './Search.module.css';
 
-type SearchState = {
-  query: string;
-};
-
 type SearchProps = {
-  search: (data: string) => void;
+  setSavedQuery: (query: string) => void;
   savedQuery: string;
+  setPage: (page: number) => void;
 };
 
-export default class Search extends Component<SearchProps, SearchState> {
-  constructor(props: SearchProps) {
-    super(props);
+const FIRST_PAGE = 1;
 
-    this.state = {
-      query: '',
-    };
+export default function Search({
+  savedQuery,
+  setSavedQuery,
+  setPage,
+}: SearchProps) {
+  const [query, setQuery] = useState(savedQuery);
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setQuery(e.target.value);
   }
 
-  componentDidUpdate(prevProps: SearchProps) {
-    if (prevProps.savedQuery !== this.props.savedQuery) {
-      this.setState({ query: this.props.savedQuery });
-    }
+  function handleSearch() {
+    setSavedQuery(query);
+    setPage(FIRST_PAGE);
   }
 
-  handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({
-      query: e.target.value,
-    });
-  }
-
-  handleSearch() {
-    this.props.search(this.state.query);
-  }
-
-  render() {
-    return (
-      <div className={styles.searchWrap}>
-        <input
-          onChange={this.handleChange}
-          value={this.state.query}
-          className={styles.input}
-        />
-        <button onClick={this.handleSearch} className={styles.btn}>
-          Search
-        </button>
-      </div>
-    );
-  }
+  return (
+    <div className={styles.searchWrap}>
+      <input onChange={handleChange} value={query} className={styles.input} />
+      <button onClick={handleSearch} className={styles.btn}>
+        Search
+      </button>
+    </div>
+  );
 }

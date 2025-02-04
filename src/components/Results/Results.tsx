@@ -1,60 +1,26 @@
-import { Component } from 'react';
 import { IPerson } from '../../types/person.type';
+import CardList from '../CardList/CardList';
 import { ErrorBoundary } from '../ErrorBoundary';
-import ErrorFallback from '../ErrorFallback';
+import ErrorFallback from '../ErrorFallback/ErrorFallback';
 import Spinner from '../Spinner/Spinner';
-import Table from '../Table/Table';
 import styles from './Results.module.css';
 
 type ResultsProps = {
   data: IPerson[];
   isLoading: boolean;
-  hasError: boolean;
 };
 
-type ResultsState = {
-  data: IPerson[];
-  isLoading: boolean;
-  hasError: boolean;
-};
-
-export default class Results extends Component<ResultsState, ResultsProps> {
-  constructor(props: ResultsProps) {
-    super(props);
-
-    this.state = {
-      data: [],
-      isLoading: true,
-      hasError: false,
-    };
-  }
-
-  componentDidUpdate(prevProps: ResultsProps) {
-    if (prevProps.data !== this.props.data) {
-      this.setState({ data: this.props.data });
-    }
-
-    if (prevProps.isLoading !== this.props.isLoading) {
-      this.setState({ isLoading: this.props.isLoading });
-    }
-
-    if (prevProps.hasError !== this.props.hasError) {
-      this.setState({ hasError: this.props.hasError });
-    }
-  }
-
-  render() {
-    return (
-      <main className={styles.resultsWrap}>
-        <h2 className={styles.title}>Results</h2>
-        {this.state.isLoading ? (
-          <Spinner />
-        ) : (
-          <ErrorBoundary fallback={<ErrorFallback />}>
-            <Table data={this.state.data} hasError={this.state.hasError} />
-          </ErrorBoundary>
-        )}
-      </main>
-    );
-  }
+export default function Results({ data, isLoading }: ResultsProps) {
+  return (
+    <div className={styles.resultsWrap}>
+      <h2 className={styles.title}>Results</h2>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <ErrorBoundary fallback={<ErrorFallback />}>
+          <CardList data={data} />
+        </ErrorBoundary>
+      )}
+    </div>
+  );
 }

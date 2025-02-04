@@ -1,0 +1,13 @@
+.card {
+  display: flex;
+  justify-content: center;
+  border: 1px solid lightgray;
+  cursor: pointer;
+  transition: all 0.3s;
+  background-color: #fff;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: lightgray;
+  }
+}
