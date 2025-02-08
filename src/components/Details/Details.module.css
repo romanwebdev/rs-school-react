@@ -1,0 +1,33 @@
+.details {
+  min-width: 280px;
+  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.2);
+  padding: 4px;
+}
+
+.buttonWrap {
+  display: flex;
+  justify-content: end;
+}
+
+.closeBtn {
+  border: none;
+  background-color: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    color: tomato;
+  }
+}
+
+.title {
+  font-size: 24px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.spinnerWrap {
+  display: flex;
+  justify-content: center;
+}
