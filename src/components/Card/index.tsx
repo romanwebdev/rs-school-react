@@ -8,10 +8,9 @@ import styles from './Card.module.css';
 
 type CardProps = {
   character: ICharacter;
-  url: string;
 };
 
-export default function Card({ character, url }: CardProps) {
+export default function Card({ character }: CardProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const characters = useSelector(
@@ -20,7 +19,7 @@ export default function Card({ character, url }: CardProps) {
 
   const isSelected = characters.find((c) => c.name === character.name);
 
-  const id = getIdFromUrl(url);
+  const id = getIdFromUrl(character.url);
 
   function handleClick(e: React.MouseEvent) {
     e.stopPropagation();

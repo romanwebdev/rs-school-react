@@ -1,22 +1,24 @@
-import { ICharacter } from '../../types/character.type';
+import { useQueryParams } from '../../hooks';
+import { useGetCharactersQuery } from '../../store/star-wars-api';
 import Card from '../Card';
+import Spinner from '../Spinner';
 import styles from './CardList.module.css';
 
-type TableProps = {
-  data: ICharacter[];
-};
+export default function CardList() {
+  const { page, search } = useQueryParams();
+  const { data, isLoading, isFetching } = useGetCharactersQuery({
+    page,
+    search,
+  });
 
-export default function CardList({ data = [] }: TableProps) {
+  if (isLoading || isFetching) return <Spinner />;
+
   return (
     <>
-      {data.length ? (
+      {data && (data.results ?? []).length ? (
         <div className={styles.cardList}>
-          {data.map((character) => (
-            <Card
-              character={character}
-              url={character.url}
-              key={character.name}
-            />
+          {data.results.map((character) => (
+            <Card character={character} key={character.name} />
           ))}
         </div>
       ) : (

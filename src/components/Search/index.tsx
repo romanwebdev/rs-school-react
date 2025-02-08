@@ -1,29 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useQueryParams, useUpdateSearchParams } from '../../hooks';
 import styles from './Search.module.css';
-
-type SearchProps = {
-  setSavedQuery: (query: string) => void;
-  savedQuery: string;
-  setPage: (page: number) => void;
-};
 
 const FIRST_PAGE = 1;
 
-export default function Search({
-  savedQuery,
-  setSavedQuery,
-  setPage,
-}: SearchProps) {
-  const [query, setQuery] = useState(savedQuery);
+export default function Search() {
+  const { search } = useQueryParams();
+  const [query, setQuery] = useState('');
+  const updateSearchParams = useUpdateSearchParams();
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  useEffect(() => {
+    setQuery(search);
+  }, [search]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
-  }
+  };
 
-  function handleSearch() {
-    setSavedQuery(query);
-    setPage(FIRST_PAGE);
-  }
+  const handleSearch = () => {
+    updateSearchParams(FIRST_PAGE.toString(), query);
+  };
 
   return (
     <div className={styles.searchWrap}>
