@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Outlet } from 'react-router';
 import './App.css';
-import Main from './components/Main/Main';
+import Main from './components/Main';
 import { IPerson } from './types/person.type';
 
 function App() {

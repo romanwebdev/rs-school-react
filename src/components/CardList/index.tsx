@@ -1,5 +1,5 @@
 import { IPerson } from '../../types/person.type';
-import Card from '../Card/Card';
+import Card from '../Card';
 import styles from './CardList.module.css';
 
 type TableProps = {

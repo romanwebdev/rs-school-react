@@ -3,9 +3,9 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { fetchItems } from '../../api';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { IPerson } from '../../types/person.type';
-import Pagination from '../Pagination/Pagination';
-import Results from '../Results/Results';
-import Search from '../Search/Search';
+import Pagination from '../Pagination';
+import Results from '../Results';
+import Search from '../Search';
 import styles from './Main.module.css';
 
 const ITEMS_COUNT = 0;

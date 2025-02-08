@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import Search from './Search';
+import Search from '.';
 
 describe('Search', () => {
   const mockSetPage = vi.fn();

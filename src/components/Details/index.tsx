@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { fetchItem } from '../../api';
 import { IPerson } from '../../types/person.type';
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../Spinner';
 import styles from './Details.module.css';
 
 export default function Details() {

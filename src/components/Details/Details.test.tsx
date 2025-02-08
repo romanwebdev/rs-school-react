@@ -1,8 +1,8 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, useNavigate, useParams } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import Details from '.';
 import { fetchItem } from '../../api';
-import Details from './Details';
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');

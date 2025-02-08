@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
-import Results from './Results';
+import Results from '.';
 
 describe('Results', () => {
   it('renders the title', () => {

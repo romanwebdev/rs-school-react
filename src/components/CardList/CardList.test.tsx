@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
+import CardList from '.';
 import { IPerson } from '../../types/person.type';
-import CardList from './CardList';
 
 describe('CardList', () => {
   it('renders the specified number of cards', () => {

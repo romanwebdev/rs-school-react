@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import Pagination from './Pagination';
+import Pagination from '.';
 
 describe('Pagination', () => {
   const mockSetPage = vi.fn();
