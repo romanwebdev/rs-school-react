@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router';
 import { fetchItems } from '../../api';
-import useLocalStorage from '../../hooks/useLocalStorage';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { IPerson } from '../../types/person.type';
 import Pagination from '../Pagination';
 import Results from '../Results';
@@ -61,7 +61,7 @@ export default function Main({ data, setData }: MainProps) {
         className={`${location.pathname.includes('details') ? styles.detailsOpen : ''}`}
         data-testid="overlay"
       ></div>
-      <div>
+      <div className="container">
         <h1>Star Wars Charachters</h1>
         <Search
           savedQuery={savedQuery}
