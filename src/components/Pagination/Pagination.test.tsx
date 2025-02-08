@@ -13,7 +13,7 @@ describe('Pagination', () => {
     mockSetPage.mockClear();
   });
 
-  it('updates URL query parameter when page changes', () => {
+  it('updates page button active status after click a button', () => {
     const { rerender } = render(
       <MemoryRouter>
         <Pagination

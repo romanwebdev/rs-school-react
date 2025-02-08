@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act } from 'react';
 import { MemoryRouter, useNavigate, useParams } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Details from '.';
@@ -48,7 +49,10 @@ describe('Details', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await act(async () => {
+      const spinner = await screen.findByTestId('spinner');
+      expect(spinner).toBeInTheDocument();
+    });
   });
 
   it('renders the relevant detailed card data', async () => {
@@ -70,7 +74,7 @@ describe('Details', () => {
     expect(screen.getByText(mockData.hair_color)).toHaveTextContent('brown');
   });
 
-  it('navigates back to the home page that hides details component', () => {
+  it('navigates back to the home page that hides details component', async () => {
     mockFetchItem.mockResolvedValueOnce(mockData);
 
     render(
@@ -79,8 +83,10 @@ describe('Details', () => {
       </MemoryRouter>
     );
 
-    const closeButton = screen.getByRole('button', { name: /✖/i });
-    fireEvent.click(closeButton);
+    await act(async () => {
+      const closeButton = screen.getByRole('button', { name: /✖/i });
+      fireEvent.click(closeButton);
+    });
 
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });

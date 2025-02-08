@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { MemoryRouter, useNavigate } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Main from '.';
@@ -23,7 +29,7 @@ describe('Main', () => {
   beforeEach(() => {
     (useNavigate as Mock).mockReturnValue(mockNavigate);
     (fetchItems as Mock).mockResolvedValue({
-      results: [{ name: 'Luke Skywalker', url: '/details/1' }],
+      results: [{ name: 'Luke Skywalker' }],
       count: 1,
     });
 
@@ -35,23 +41,27 @@ describe('Main', () => {
     vi.clearAllMocks();
   });
 
-  it('renders the title', () => {
-    render(
-      <MemoryRouter>
-        <Main data={[]} setData={mockSetData} />
-      </MemoryRouter>
-    );
+  it('renders the title', async () => {
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <Main data={[]} setData={mockSetData} />
+        </MemoryRouter>
+      );
+    });
 
     const title = screen.getByText(/star wars/i);
     expect(title).toBeInTheDocument();
   });
 
-  it('navigates to home on main click', () => {
-    render(
-      <MemoryRouter>
-        <Main data={[]} setData={mockSetData} />
-      </MemoryRouter>
-    );
+  it('navigates to home on main click', async () => {
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <Main data={[]} setData={mockSetData} />
+        </MemoryRouter>
+      );
+    });
 
     const mainBlock = screen.getByText(/star wars/i).parentElement;
     if (mainBlock) {
@@ -70,9 +80,7 @@ describe('Main', () => {
 
     await waitFor(() => expect(fetchItems).toHaveBeenCalledWith('', 1));
 
-    expect(mockSetData).toHaveBeenCalledWith([
-      { name: 'Luke Skywalker', url: '/details/1' },
-    ]);
+    expect(mockSetData).toHaveBeenCalledWith([{ name: 'Luke Skywalker' }]);
   });
 
   it('saves the query to localStorage and fetches data when searching', async () => {
@@ -85,23 +93,27 @@ describe('Main', () => {
     const input = screen.getByRole('textbox');
     const button = screen.getByRole('button', { name: /search/i });
 
-    fireEvent.change(input, { target: { value: 'Darth Vader' } });
-    fireEvent.click(button);
+    await act(async () => {
+      fireEvent.change(input, { target: { value: 'Darth Vader' } });
+      fireEvent.click(button);
+    });
 
     expect(localStorage.setItem).toHaveBeenCalledWith('query', 'Darth Vader');
   });
 
-  it('retrieves query from localStorage on mount', () => {
+  it('retrieves query from localStorage on mount', async () => {
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation((key: string) => {
       if (key === 'query') return 'Luke Skywalker';
       return null;
     });
 
-    render(
-      <MemoryRouter>
-        <Main data={[]} setData={mockSetData} />
-      </MemoryRouter>
-    );
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <Main data={[]} setData={mockSetData} />
+        </MemoryRouter>
+      );
+    });
 
     expect(localStorage.getItem).toHaveBeenCalledWith('query');
 
@@ -126,5 +138,18 @@ describe('Main', () => {
     expect(consoleLogSpy).toHaveBeenCalledWith(mockError);
 
     consoleLogSpy.mockRestore();
+  });
+
+  it('shows overlay when details is opened', async () => {
+    await act(async () => {
+      render(
+        <MemoryRouter initialEntries={['/details/some-item']}>
+          <Main data={[]} setData={mockSetData} />
+        </MemoryRouter>
+      );
+    });
+
+    const divElement = screen.getByTestId('overlay');
+    expect(divElement).toBeInTheDocument();
   });
 });
