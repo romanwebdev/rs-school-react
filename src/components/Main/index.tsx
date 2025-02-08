@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useLocation, useNavigate, useSearchParams } from 'react-router';
 import { fetchItems } from '../../api';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { IPerson } from '../../types/person.type';
@@ -23,6 +23,7 @@ export default function Main({ data, setData }: MainProps) {
   const [page, setPage] = useState(PAGE);
   const navigate = useNavigate();
   const [, setSearchParams] = useSearchParams();
+  const location = useLocation();
 
   useEffect(() => {
     setSearchParams({ page: page.toString() });
@@ -56,7 +57,11 @@ export default function Main({ data, setData }: MainProps) {
 
   return (
     <div className={styles.main} onClick={closeDetails}>
-      <div className="container">
+      <div
+        className={`${location.pathname.includes('details') ? styles.detailsOpen : ''}`}
+        data-testid="overlay"
+      ></div>
+      <div>
         <h1>Star Wars Charachters</h1>
         <Search
           savedQuery={savedQuery}

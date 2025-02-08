@@ -1,4 +1,14 @@
 .main {
   width: 100%;
   margin: 10px;
+  position: relative;
+}
+
+.detailsOpen {
+  background: rgba(128, 128, 128, 0.062);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
