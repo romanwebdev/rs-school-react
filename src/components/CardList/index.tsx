@@ -1,9 +1,9 @@
-import { IPerson } from '../../types/person.type';
+import { ICharacter } from '../../types/character.type';
 import Card from '../Card';
 import styles from './CardList.module.css';
 
 type TableProps = {
-  data: IPerson[];
+  data: ICharacter[];
 };
 
 export default function CardList({ data = [] }: TableProps) {
@@ -11,8 +11,12 @@ export default function CardList({ data = [] }: TableProps) {
     <>
       {data.length ? (
         <div className={styles.cardList}>
-          {data.map((person) => (
-            <Card name={person.name} url={person.url} key={person.name} />
+          {data.map((character) => (
+            <Card
+              character={character}
+              url={character.url}
+              key={character.name}
+            />
           ))}
         </div>
       ) : (

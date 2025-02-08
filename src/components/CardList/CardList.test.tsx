@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import CardList from '.';
-import { IPerson } from '../../types/person.type';
+import { store } from '../../store';
+import { ICharacter } from '../../types/character.type';
 
 describe('CardList', () => {
   it('renders the specified number of cards', () => {
@@ -31,7 +33,9 @@ describe('CardList', () => {
 
     render(
       <BrowserRouter>
-        <CardList data={mockData} />
+        <Provider store={store}>
+          <CardList data={mockData} />
+        </Provider>
       </BrowserRouter>
     );
 
@@ -40,11 +44,13 @@ describe('CardList', () => {
   });
 
   it('displays an appropriate message if no cards are present', () => {
-    const emptyArray: IPerson[] = [];
+    const emptyArray: ICharacter[] = [];
 
     render(
       <BrowserRouter>
-        <CardList data={emptyArray} />
+        <Provider store={store}>
+          <CardList data={emptyArray} />
+        </Provider>
       </BrowserRouter>
     );
 

@@ -4,12 +4,12 @@ import './App.css';
 import Header from './components/Header';
 import Main from './components/Main';
 import { ThemeProvider } from './context';
-import { IPerson } from './types/person.type';
+import { ICharacter } from './types/character.type';
 
 function App() {
-  const [data, setData] = useState<IPerson[]>([]);
+  const [data, setData] = useState<ICharacter[]>([]);
 
-  const handleSetData = useCallback((data: IPerson[]) => {
+  const handleSetData = useCallback((data: ICharacter[]) => {
     setData(data);
   }, []);
 

@@ -1,4 +1,4 @@
-import { IPerson } from '../../types/person.type';
+import { ICharacter } from '../../types/character.type';
 import CardList from '../CardList';
 import { ErrorBoundary } from '../ErrorBoundary';
 import ErrorFallback from '../ErrorFallback';
@@ -6,7 +6,7 @@ import Spinner from '../Spinner';
 import styles from './Results.module.css';
 
 type ResultsProps = {
-  data: IPerson[];
+  data: ICharacter[];
   isLoading: boolean;
 };
 

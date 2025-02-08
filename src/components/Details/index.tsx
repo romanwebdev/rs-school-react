@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { fetchItem } from '../../api';
-import { IPerson } from '../../types/person.type';
+import { ICharacter } from '../../types/character.type';
 import Spinner from '../Spinner';
 import styles from './Details.module.css';
 
 export default function Details() {
   const navigate = useNavigate();
   const params = useParams();
-  const [info, setInfo] = useState<IPerson | null>(null);
+  const [info, setInfo] = useState<ICharacter | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {

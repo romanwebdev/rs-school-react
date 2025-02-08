@@ -5,10 +5,12 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
+import { Provider } from 'react-redux';
 import { MemoryRouter, useNavigate } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Main from '.';
 import { fetchItems } from '../../api';
+import { store } from '../../store';
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -45,7 +47,9 @@ describe('Main', () => {
     await act(async () => {
       render(
         <MemoryRouter>
-          <Main data={[]} setData={mockSetData} />
+          <Provider store={store}>
+            <Main data={[]} setData={mockSetData} />
+          </Provider>
         </MemoryRouter>
       );
     });
@@ -58,7 +62,9 @@ describe('Main', () => {
     await act(async () => {
       render(
         <MemoryRouter>
-          <Main data={[]} setData={mockSetData} />
+          <Provider store={store}>
+            <Main data={[]} setData={mockSetData} />
+          </Provider>
         </MemoryRouter>
       );
     });
@@ -74,7 +80,9 @@ describe('Main', () => {
   it('receives data and adds it to the local state', async () => {
     render(
       <MemoryRouter>
-        <Main data={[]} setData={mockSetData} />
+        <Provider store={store}>
+          <Main data={[]} setData={mockSetData} />
+        </Provider>
       </MemoryRouter>
     );
 
@@ -86,7 +94,9 @@ describe('Main', () => {
   it('saves the query to localStorage and fetches data when searching', async () => {
     render(
       <MemoryRouter>
-        <Main data={[]} setData={mockSetData} />
+        <Provider store={store}>
+          <Main data={[]} setData={mockSetData} />
+        </Provider>
       </MemoryRouter>
     );
 
@@ -110,7 +120,9 @@ describe('Main', () => {
     await act(async () => {
       render(
         <MemoryRouter>
-          <Main data={[]} setData={mockSetData} />
+          <Provider store={store}>
+            <Main data={[]} setData={mockSetData} />
+          </Provider>
         </MemoryRouter>
       );
     });
@@ -129,7 +141,9 @@ describe('Main', () => {
 
     render(
       <MemoryRouter>
-        <Main data={[]} setData={mockSetData} />
+        <Provider store={store}>
+          <Main data={[]} setData={mockSetData} />
+        </Provider>
       </MemoryRouter>
     );
 
@@ -144,7 +158,9 @@ describe('Main', () => {
     await act(async () => {
       render(
         <MemoryRouter initialEntries={['/details/some-item']}>
-          <Main data={[]} setData={mockSetData} />
+          <Provider store={store}>
+            <Main data={[]} setData={mockSetData} />
+          </Provider>
         </MemoryRouter>
       );
     });

@@ -2,18 +2,19 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router';
 import { fetchItems } from '../../api';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { IPerson } from '../../types/person.type';
+import { ICharacter } from '../../types/character.type';
 import Pagination from '../Pagination';
 import Results from '../Results';
 import Search from '../Search';
+import SelectedItems from '../SelectedItems';
 import styles from './Main.module.css';
 
 const ITEMS_COUNT = 0;
 const PAGE = 1;
 
 type MainProps = {
-  data: IPerson[];
-  setData: (data: IPerson[]) => void;
+  data: ICharacter[];
+  setData: (data: ICharacter[]) => void;
 };
 
 export default function Main({ data, setData }: MainProps) {
@@ -75,6 +76,10 @@ export default function Main({ data, setData }: MainProps) {
           currentPage={page}
           isLoading={isLoading}
         />
+
+        <div className={styles.selectedItemsWrap}>
+          <SelectedItems />
+        </div>
       </div>
     </div>
   );
