@@ -1,37 +1,13 @@
-import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
-import { fetchItem } from '../../api';
-import { ICharacter } from '../../types/character.type';
+import { useGetCharacterByIdQuery } from '../../store/star-wars-api';
 import Spinner from '../Spinner';
 import styles from './Details.module.css';
 
 export default function Details() {
   const navigate = useNavigate();
-  const params = useParams();
-  const [info, setInfo] = useState<ICharacter | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        if (params.id) {
-          const data = await fetchItem(params.id);
-
-          if (data) {
-            setInfo(data);
-          }
-        }
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [params]);
+  const params = useParams();
+  const { data, isLoading } = useGetCharacterByIdQuery({ id: params.id });
 
   function closeDetails() {
     navigate({
@@ -59,22 +35,22 @@ export default function Details() {
       ) : (
         <ul>
           <li>
-            <strong>Name:</strong> {info?.name}
+            <strong>Name:</strong> {data?.name}
           </li>
           <li>
-            <strong>Birth Year:</strong> {info?.birth_year}
+            <strong>Birth Year:</strong> {data?.birth_year}
           </li>
           <li>
-            <strong>Height:</strong> {info?.height}
+            <strong>Height:</strong> {data?.height}
           </li>
           <li>
-            <strong>Skin Color:</strong> {info?.skin_color}
+            <strong>Skin Color:</strong> {data?.skin_color}
           </li>
           <li>
-            <strong>Eye Color:</strong> {info?.eye_color}
+            <strong>Eye Color:</strong> {data?.eye_color}
           </li>
           <li>
-            <strong>Hair Color:</strong> {info?.hair_color}
+            <strong>Hair Color:</strong> {data?.hair_color}
           </li>
         </ul>
       )}

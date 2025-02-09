@@ -15,7 +15,10 @@ export const starWarsApi = createApi({
     getCharacters: builder.query<IResponse, IRequest>({
       query: ({ page, search }) => `/?page=${page}&search=${search}`,
     }),
+    getCharacterById: builder.query<ICharacter, { id: string | undefined }>({
+      query: ({ id }) => `/${id}`,
+    }),
   }),
 });
 
-export const { useGetCharactersQuery, useLazyGetCharactersQuery } = starWarsApi;
+export const { useGetCharactersQuery, useGetCharacterByIdQuery } = starWarsApi;
