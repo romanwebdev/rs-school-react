@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { RootState } from '../../store';
 import { toggleCharacterSelection } from '../../store/characters-slice';
 import { ICharacter } from '../../types/character.type';
@@ -16,6 +16,7 @@ export default function Card({ character }: CardProps) {
   const characters = useSelector(
     (state: RootState) => state.characters.selectedCharacters
   );
+  const [searchParams] = useSearchParams();
 
   const isSelected = characters.find((c) => c.name === character.name);
 
@@ -23,7 +24,11 @@ export default function Card({ character }: CardProps) {
 
   function handleClick(e: React.MouseEvent) {
     e.stopPropagation();
-    navigate(`/details/${id}`);
+
+    navigate({
+      pathname: `/details/${id}`,
+      search: searchParams.toString(),
+    });
   }
 
   function handleSelect(e: React.MouseEvent) {

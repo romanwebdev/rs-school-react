@@ -88,7 +88,10 @@ describe('Details', () => {
       fireEvent.click(closeButton);
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/');
+    expect(mockNavigate).toHaveBeenCalledWith({
+      pathname: '/',
+      search: '',
+    });
   });
 
   it('handles API errors and logs them', async () => {

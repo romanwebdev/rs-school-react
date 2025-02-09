@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate, useSearchParams } from 'react-router';
 import Pagination from '../Pagination';
 import Results from '../Results';
 import Search from '../Search';
@@ -7,16 +7,22 @@ import styles from './Main.module.css';
 
 export default function Main() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   function closeDetails() {
-    // navigate(`/`); // TODO: fix later
+    navigate({
+      pathname: `/`,
+      search: searchParams.toString(),
+    });
   }
 
   return (
-    <div className={styles.main} onClick={closeDetails}>
+    <div className={styles.main}>
       <div
-        className={`${location.pathname.includes('details') ? styles.detailsOpen : ''}`}
+        className={`${location.pathname.includes('details') ? styles.overlay : ''}`}
         data-testid="overlay"
+        onClick={closeDetails}
       ></div>
       <div className="container">
         <h1>Star Wars Charachters</h1>

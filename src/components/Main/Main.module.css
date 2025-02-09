@@ -1,9 +1,10 @@
 .main {
   margin: 10px;
   position: relative;
+  height: 100%;
 }
 
-.detailsOpen {
+.overlay {
   position: absolute;
   top: 0;
   bottom: 0;

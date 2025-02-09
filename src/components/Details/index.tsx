@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { fetchItem } from '../../api';
 import { ICharacter } from '../../types/character.type';
 import Spinner from '../Spinner';
@@ -10,6 +10,7 @@ export default function Details() {
   const params = useParams();
   const [info, setInfo] = useState<ICharacter | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +34,10 @@ export default function Details() {
   }, [params]);
 
   function closeDetails() {
-    navigate('/');
+    navigate({
+      pathname: `/`,
+      search: searchParams.toString(),
+    });
   }
 
   return (

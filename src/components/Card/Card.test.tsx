@@ -69,7 +69,10 @@ describe('Card', () => {
     const button = screen.getByRole('button', { name: 'Luke Skywalker' });
     fireEvent.click(button);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/details/1');
+    expect(mockNavigate).toHaveBeenCalledWith({
+      pathname: '/details/1',
+      search: '',
+    });
   });
 
   it('dispatches the toggleCharacterSelection action when checkbox is clicked', () => {
