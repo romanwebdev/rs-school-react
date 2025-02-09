@@ -1,8 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { unselectAll } from '../../store/characters-slice';
+import { downloadCSV } from '../../utils';
 import Button from '../UI/Button';
 import styles from './SelectedItems.module.css';
+
+const CSV_FILE_NAME = 'sw_characters';
 
 export default function SelectedItems() {
   const characters = useSelector(
@@ -17,7 +20,7 @@ export default function SelectedItems() {
   };
 
   const handleDownload = () => {
-    console.log('download'); // TODO: temporary
+    downloadCSV(characters, CSV_FILE_NAME);
   };
 
   return (
