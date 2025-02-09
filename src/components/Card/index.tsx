@@ -17,9 +17,7 @@ export default function Card({ character }: CardProps) {
     (state: RootState) => state.characters.selectedCharacters
   );
   const [searchParams] = useSearchParams();
-
   const isSelected = characters.find((c) => c.name === character.name);
-
   const id = getIdFromUrl(character.url);
 
   function handleClick(e: React.MouseEvent) {
@@ -31,7 +29,7 @@ export default function Card({ character }: CardProps) {
     });
   }
 
-  function handleSelect(e: React.MouseEvent) {
+  function handleSelect(e: React.ChangeEvent) {
     e.stopPropagation();
     dispatch(toggleCharacterSelection(character));
   }
@@ -40,8 +38,9 @@ export default function Card({ character }: CardProps) {
     <button className={styles.card} type="button" onClick={handleClick}>
       <input
         type="checkbox"
-        onClick={handleSelect}
-        defaultChecked={!!isSelected}
+        onChange={handleSelect}
+        checked={!!isSelected}
+        onClick={(event) => event.stopPropagation()}
       />
       <p>{character.name}</p>
     </button>

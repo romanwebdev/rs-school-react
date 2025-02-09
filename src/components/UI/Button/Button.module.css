@@ -1,0 +1,13 @@
+.btn {
+  border: none;
+  background-color: lightpink;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    filter: saturate(1.6);
+  }
+}

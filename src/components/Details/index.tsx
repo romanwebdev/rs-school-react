@@ -1,6 +1,6 @@
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { useGetCharacterByIdQuery } from '../../store/star-wars-api';
-import Spinner from '../Spinner';
+import Spinner from '../UI/Spinner';
 import styles from './Details.module.css';
 
 export default function Details() {

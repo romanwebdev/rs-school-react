@@ -1,7 +1,7 @@
 import { useQueryParams } from '../../hooks';
 import { useGetCharactersQuery } from '../../store/star-wars-api';
 import Card from '../Card';
-import Spinner from '../Spinner';
+import Spinner from '../UI/Spinner';
 import styles from './CardList.module.css';
 
 export default function CardList() {

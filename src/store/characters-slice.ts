@@ -24,9 +24,13 @@ export const charactersSlice = createSlice({
         state.selectedCharacters.push(action.payload);
       }
     },
+    unselectAll: (state) => {
+      state.selectedCharacters = [];
+    },
   },
 });
 
-export const { toggleCharacterSelection } = charactersSlice.actions;
+export const { toggleCharacterSelection, unselectAll } =
+  charactersSlice.actions;
 
 export default charactersSlice.reducer;

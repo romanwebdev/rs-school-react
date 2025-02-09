@@ -10,15 +10,10 @@ export default function Pagination() {
   const { page, search } = useQueryParams();
   const [currentPage, setCurrentPage] = useState(PAGE);
   const [pages, setPages] = useState<number[]>([]);
-  const { data, isLoading, isFetching } = useGetCharactersQuery(
-    {
-      page,
-      search,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const { data, isLoading, isFetching } = useGetCharactersQuery({
+    page,
+    search,
+  });
   const updateSearchParams = useUpdateSearchParams();
 
   useEffect(() => {
