@@ -15,7 +15,7 @@ export default function CardList() {
 
   return (
     <>
-      {data && (data.results ?? []).length ? (
+      {data && data.results.length ? (
         <div className={styles.cardList}>
           {data.results.map((character) => (
             <Card character={character} key={character.name} />

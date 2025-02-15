@@ -1,13 +1,13 @@
 .home {
-    display: flex;
-    height: 100vh;
-    background-color: var(--background-color);
-    color: var(--text-color);
+  display: flex;
+  height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 .mainWrap {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 }

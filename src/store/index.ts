@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import characterReducer from './characters-slice';
+import charactersReducer from './characters-slice';
 import { starWarsApi } from './star-wars-api';
 
 export const store = configureStore({
   reducer: {
-    characters: characterReducer,
+    characters: charactersReducer,
     [starWarsApi.reducerPath]: starWarsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
