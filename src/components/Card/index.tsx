@@ -23,7 +23,11 @@ export default function Card({ character }: CardProps) {
   function handleClick(e: React.MouseEvent) {
     e.stopPropagation();
 
-    router.push(`/details/${id}?${searchParams.toString()}`);
+    if (id) {
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.set('details', id);
+      router.replace(`/?${newSearchParams.toString()}`);
+    }
   }
 
   function handleSelect(e: React.ChangeEvent) {

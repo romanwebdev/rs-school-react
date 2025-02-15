@@ -1,19 +1,20 @@
-import { useNavigate, useParams, useSearchParams } from 'react-router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useGetCharacterByIdQuery } from '../../store/star-wars-api';
 import Spinner from '../UI/Spinner';
 import styles from './Details.module.css';
 
 export default function Details() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const params = useParams();
-  const { data, isLoading } = useGetCharacterByIdQuery({ id: params.id });
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { data, isLoading } = useGetCharacterByIdQuery({
+    id: searchParams.get('details') ?? undefined,
+  });
 
   function closeDetails() {
-    navigate({
-      pathname: `/`,
-      search: searchParams.toString(),
-    });
+    const newSearchParams = new URLSearchParams(searchParams);
+
+    newSearchParams.delete('details');
+    router.push(`/?${newSearchParams.toString()}`);
   }
 
   return (

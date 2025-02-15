@@ -8,17 +8,19 @@ import styles from './Main.module.css';
 export default function Main() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const currentPath =
-    typeof window !== 'undefined' ? window.location.pathname : '';
+  const hasDetails = !!searchParams.get('details');
 
   function closeDetails() {
-    router.push(`/?${searchParams.toString()}`);
+    const newSearchParams = new URLSearchParams(searchParams);
+
+    newSearchParams.delete('details');
+    router.push(`/?${newSearchParams.toString()}`);
   }
 
   return (
     <div className={styles.main}>
       <div
-        className={`${currentPath.includes('details') ? styles.overlay : ''}`}
+        className={`${hasDetails ? styles.overlay : ''}`}
         data-testid="overlay"
         onClick={closeDetails}
       ></div>
