@@ -1,19 +1,18 @@
-import { Outlet } from 'react-router';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router';
 import './App.css';
-import Header from './components/Header';
-import Main from './components/Main';
+import Routing from './components/Routing';
 import { ThemeProvider } from './context';
+import { store } from './store';
 
 function App() {
   return (
     <ThemeProvider>
-      <div className="app">
-        <div className="main-wrap">
-          <Header />
-          <Main />
-        </div>
-        <Outlet />
-      </div>
+      <BrowserRouter>
+        <Provider store={store}>
+          <Routing />
+        </Provider>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

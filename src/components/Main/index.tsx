@@ -24,7 +24,7 @@ export default function Main() {
         data-testid="overlay"
         onClick={closeDetails}
       ></div>
-      <div className="container">
+      <div className={styles.container}>
         <h1>Star Wars Charachters</h1>
         <Search />
         <Results />
