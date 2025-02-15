@@ -2,9 +2,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { describe, expect, it, Mock, vi } from 'vitest';
 import ThemeSelection from '.';
-import { Themes } from '../../enums';
-import { useThemeContext } from '../../hooks';
-import { store } from '../../store';
+import { Themes } from '../../../enums';
+import { useThemeContext } from '../../../hooks';
+import { store } from '../../../store';
 
 vi.mock('../../hooks', () => ({
   useThemeContext: vi.fn(),

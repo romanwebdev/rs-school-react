@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { unselectAll } from '../../store/characters-slice';
-import { downloadCSV } from '../../utils';
+import { RootState } from '../../../store';
+import { unselectAll } from '../../../store/characters-slice';
+import { downloadCSV } from '../../../utils';
 import Button from '../UI/Button';
 import styles from './SelectedItems.module.css';
 

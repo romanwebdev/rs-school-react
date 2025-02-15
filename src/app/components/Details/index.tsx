@@ -1,5 +1,5 @@
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useGetCharacterByIdQuery } from '../../store/star-wars-api';
+import { useGetCharacterByIdQuery } from '../../../store/star-wars-api';
 import Spinner from '../UI/Spinner';
 import styles from './Details.module.css';
 

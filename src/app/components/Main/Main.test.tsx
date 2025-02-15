@@ -3,8 +3,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Main from '.';
-import { store } from '../../store';
-import { useGetCharactersQuery } from '../../store/star-wars-api';
+import { store } from '../../../store';
+import { useGetCharactersQuery } from '../../../store/star-wars-api';
 
 vi.mock('next/navigation', async () => {
   const actual = await vi.importActual('next/navigation');

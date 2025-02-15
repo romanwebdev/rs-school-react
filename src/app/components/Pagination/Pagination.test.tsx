@@ -2,9 +2,9 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Pagination from '.';
-import * as hooks from '../../hooks';
-import { store } from '../../store';
-import { useGetCharactersQuery } from '../../store/star-wars-api';
+import * as hooks from '../../../hooks';
+import { store } from '../../../store';
+import { useGetCharactersQuery } from '../../../store/star-wars-api';
 
 vi.mock('../../store/star-wars-api', async () => {
   const actual = await vi.importActual('../../store/star-wars-api');

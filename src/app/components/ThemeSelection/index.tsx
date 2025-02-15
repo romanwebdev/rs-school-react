@@ -1,5 +1,5 @@
-import { Themes } from '../../enums';
-import { useThemeContext } from '../../hooks';
+import { Themes } from '../../../enums';
+import { useThemeContext } from '../../../hooks';
 
 const themes = [
   {

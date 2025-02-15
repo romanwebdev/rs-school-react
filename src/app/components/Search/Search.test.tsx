@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Search from '.';
-import * as hooks from '../../hooks';
+import * as hooks from '../../../hooks';
 
 vi.mock('next/navigation', async () => {
   const actual = await vi.importActual('next/navigation');

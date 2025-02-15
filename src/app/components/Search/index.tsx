@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useQueryParams, useUpdateSearchParams } from '../../hooks';
+import { useQueryParams, useUpdateSearchParams } from '../../../hooks';
 import Button from '../UI/Button';
 import styles from './Search.module.css';
 

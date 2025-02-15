@@ -6,9 +6,9 @@ import SelectedItems from '.';
 import charactersReducer, {
   CharactersState,
   unselectAll,
-} from '../../store/characters-slice';
-import { ICharacter } from '../../types/character.type';
-import { downloadCSV } from '../../utils';
+} from '../../../store/characters-slice';
+import { ICharacter } from '../../../types/character.type';
+import { downloadCSV } from '../../../utils';
 
 type IState = { characters: CharactersState };
 

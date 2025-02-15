@@ -3,7 +3,7 @@ import { act } from 'react';
 import { Provider } from 'react-redux';
 import { describe, expect, it, vi } from 'vitest';
 import Results from '.';
-import { store } from '../../store';
+import { store } from '../../../store';
 
 vi.mock('../../hooks', () => ({
   useQueryParams: () => ({

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useQueryParams, useUpdateSearchParams } from '../../hooks';
-import { useGetCharactersQuery } from '../../store/star-wars-api';
+import { useQueryParams, useUpdateSearchParams } from '../../../hooks';
+import { useGetCharactersQuery } from '../../../store/star-wars-api';
 import styles from './Pagination.module.css';
 
 const ITEMS_PER_PAGE = 10;

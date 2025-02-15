@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { describe, expect, it, Mock, vi } from 'vitest';
 import CardList from '.';
-import { store } from '../../store';
-import { useGetCharactersQuery } from '../../store/star-wars-api';
+import { store } from '../../../store';
+import { useGetCharactersQuery } from '../../../store/star-wars-api';
 
 vi.mock('../../hooks', () => ({
   useQueryParams: () => ({

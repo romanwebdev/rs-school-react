@@ -7,7 +7,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
-      <div className={`theme-${theme}`}>{children}</div>
+      <div className={`theme-${theme} theme-wrap`}>{children}</div>
     </ThemeContext.Provider>
   );
 };

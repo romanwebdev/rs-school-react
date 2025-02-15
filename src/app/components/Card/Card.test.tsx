@@ -6,8 +6,8 @@ import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Card from '.';
 import charactersReducer, {
   toggleCharacterSelection,
-} from '../../store/characters-slice';
-import { ICharacter } from '../../types/character.type';
+} from '../../../store/characters-slice';
+import { ICharacter } from '../../../types/character.type';
 
 vi.mock('next/navigation', async () => {
   const actual = await vi.importActual('next/navigation');

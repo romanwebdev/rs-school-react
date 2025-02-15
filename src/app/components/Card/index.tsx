@@ -1,9 +1,9 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { toggleCharacterSelection } from '../../store/characters-slice';
-import { ICharacter } from '../../types/character.type';
-import { getIdFromUrl } from '../../utils';
+import { RootState } from '../../../store';
+import { toggleCharacterSelection } from '../../../store/characters-slice';
+import { ICharacter } from '../../../types/character.type';
+import { getIdFromUrl } from '../../../utils';
 import styles from './Card.module.css';
 
 type CardProps = {
