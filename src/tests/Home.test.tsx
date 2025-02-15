@@ -1,33 +1,61 @@
 import { render, screen } from '@testing-library/react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router';
-import { describe, expect, it } from 'vitest';
-import Home from '.';
-import { store } from '../../store';
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import Home from '../pages';
+import { store } from '../store';
+import { useGetCharactersQuery } from '../store/star-wars-api';
+
+vi.mock('next/navigation', async () => {
+  const actual = await vi.importActual('next/navigation');
+
+  return {
+    ...actual,
+    useSearchParams: vi.fn(),
+    useRouter: vi.fn(),
+  };
+});
+
+vi.mock('../store/star-wars-api', async () => {
+  const actual = await vi.importActual('../store/star-wars-api');
+
+  return {
+    ...actual,
+    useGetCharactersQuery: vi.fn().mockReturnValue({
+      data: { results: [] },
+      isLoading: false,
+      isFetching: false,
+    }),
+  };
+});
 
 describe('Home Page', () => {
-  it('renders Home Page', () => {
-    render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <Home />
-        </Provider>
-      </MemoryRouter>
-    );
+  const mockRouter = {
+    push: vi.fn(),
+  };
 
-    const homeElement = screen.getByTestId('home');
-    expect(homeElement).toBeInTheDocument();
+  beforeEach(() => {
+    (useRouter as Mock).mockReturnValue(mockRouter);
   });
 
-  it('renders Home Page for a main route', () => {
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
+  it('renders Home Page', async () => {
+    (useGetCharactersQuery as Mock).mockReturnValue({
+      data: { count: 50, results: [] },
+      isLoading: false,
+      isFetching: false,
+    });
+    (useSearchParams as Mock).mockReturnValue({
+      get: vi.fn(),
+    });
+
     render(
-      <MemoryRouter initialEntries={['/']}>
-        <Provider store={store}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Home />
+      </Provider>
     );
 
     const homeElement = screen.getByTestId('home');

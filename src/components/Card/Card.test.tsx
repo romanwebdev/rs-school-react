@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit/react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { useRouter } from 'next/navigation';
 import { Provider } from 'react-redux';
-import { MemoryRouter, useNavigate } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Card from '.';
 import charactersReducer, {
@@ -9,16 +9,19 @@ import charactersReducer, {
 } from '../../store/characters-slice';
 import { ICharacter } from '../../types/character.type';
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('next/navigation', async () => {
+  const actual = await vi.importActual('next/navigation');
   return {
     ...actual,
-    useNavigate: vi.fn(),
+    useRouter: vi.fn(),
+    useSearchParams: vi.fn(),
   };
 });
 
 describe('Card', () => {
-  const mockNavigate = vi.fn();
+  const mockRouter = {
+    replace: vi.fn(),
+  };
   const mockCharacter: ICharacter = {
     name: 'Luke Skywalker',
     height: '172',
@@ -32,7 +35,7 @@ describe('Card', () => {
   let store: ReturnType<typeof configureStore>;
 
   beforeEach(() => {
-    (useNavigate as Mock).mockReturnValue(mockNavigate);
+    (useRouter as Mock).mockReturnValue(mockRouter);
 
     store = configureStore({
       reducer: {
@@ -47,11 +50,9 @@ describe('Card', () => {
 
   it('renders the relevant card data', () => {
     render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <Card character={mockCharacter} />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Card character={mockCharacter} />
+      </Provider>
     );
 
     expect(screen.getByText('Luke Skywalker')).toBeInTheDocument();
@@ -59,20 +60,15 @@ describe('Card', () => {
 
   it('navigates to the character details page when clicked', () => {
     render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <Card character={mockCharacter} />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Card character={mockCharacter} />
+      </Provider>
     );
 
     const button = screen.getByRole('button', { name: 'Luke Skywalker' });
     fireEvent.click(button);
 
-    expect(mockNavigate).toHaveBeenCalledWith({
-      pathname: '/details/1',
-      search: '',
-    });
+    expect(mockRouter.replace).toHaveBeenCalledWith(`/?details=1`);
   });
 
   it('dispatches the toggleCharacterSelection action when checkbox is clicked', () => {
@@ -80,11 +76,9 @@ describe('Card', () => {
     store.dispatch = dispatch;
 
     render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <Card character={mockCharacter} />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Card character={mockCharacter} />
+      </Provider>
     );
 
     const checkbox = screen.getByRole('checkbox');
@@ -99,11 +93,9 @@ describe('Card', () => {
     store.dispatch(toggleCharacterSelection(mockCharacter));
 
     render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <Card character={mockCharacter} />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Card character={mockCharacter} />
+      </Provider>
     );
 
     const checkbox = screen.getByRole('checkbox');
@@ -112,11 +104,9 @@ describe('Card', () => {
 
   it('does not check the checkbox if the character is not selected', () => {
     render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <Card character={mockCharacter} />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Card character={mockCharacter} />
+      </Provider>
     );
 
     const checkbox = screen.getByRole('checkbox');

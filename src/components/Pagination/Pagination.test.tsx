@@ -1,9 +1,19 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
-import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { Provider } from 'react-redux';
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Pagination from '.';
 import * as hooks from '../../hooks';
+import { store } from '../../store';
 import { useGetCharactersQuery } from '../../store/star-wars-api';
+
+vi.mock('../../store/star-wars-api', async () => {
+  const actual = await vi.importActual('../../store/star-wars-api');
+
+  return {
+    ...actual,
+    useGetCharactersQuery: vi.fn(),
+  };
+});
 
 describe('Pagination', () => {
   const mockUpdateSearchParams = vi.fn();
@@ -14,27 +24,25 @@ describe('Pagination', () => {
   const search = '';
 
   beforeEach(() => {
-    vi.clearAllMocks();
-
-    vi.mock('../../store/star-wars-api', () => ({
-      useGetCharactersQuery: vi.fn(),
-    }));
-
     mockUseQueryParams.mockReturnValue({ page, search });
     mockUseUpdateSearchParams.mockReturnValue(mockUpdateSearchParams);
 
     (useGetCharactersQuery as Mock).mockReturnValue({
-      data: { count: 50 },
+      data: { count: 50, results: [] },
       isLoading: false,
       isFetching: false,
     });
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders pagination buttons and updates the active button when clicked', async () => {
     render(
-      <MemoryRouter>
+      <Provider store={store}>
         <Pagination />
-      </MemoryRouter>
+      </Provider>
     );
 
     const pageButtons = screen.getAllByRole('button');
@@ -53,9 +61,9 @@ describe('Pagination', () => {
 
   it('disables the button of the current page and marks it as active', async () => {
     render(
-      <MemoryRouter>
+      <Provider store={store}>
         <Pagination />
-      </MemoryRouter>
+      </Provider>
     );
 
     const firstPageButton = screen.getByRole('button', { name: '1' });
@@ -75,9 +83,9 @@ describe('Pagination', () => {
     });
 
     render(
-      <MemoryRouter>
+      <Provider store={store}>
         <Pagination />
-      </MemoryRouter>
+      </Provider>
     );
 
     const pageButtons = screen.queryAllByRole('button');
@@ -86,9 +94,9 @@ describe('Pagination', () => {
 
   it('updates the page correctly when the user clicks a page button', async () => {
     render(
-      <MemoryRouter>
+      <Provider store={store}>
         <Pagination />
-      </MemoryRouter>
+      </Provider>
     );
 
     const thirdPageButton = screen.getByRole('button', { name: '3' });

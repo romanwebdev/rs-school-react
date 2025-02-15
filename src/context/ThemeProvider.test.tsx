@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useContext } from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import { Themes } from '../enums';
 import { store } from '../store';
@@ -24,13 +23,11 @@ describe('ThemeProvider', () => {
 
   it('provides theme context with default light theme', () => {
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <ThemeProvider>
-            <TestComponent />
-          </ThemeProvider>
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <ThemeProvider>
+          <TestComponent />
+        </ThemeProvider>
+      </Provider>
     );
 
     const currentTheme = screen.getByTestId('current-theme');
@@ -39,13 +36,11 @@ describe('ThemeProvider', () => {
 
   it('updates theme when setTheme is called', async () => {
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <ThemeProvider>
-            <TestComponent />
-          </ThemeProvider>
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <ThemeProvider>
+          <TestComponent />
+        </ThemeProvider>
+      </Provider>
     );
 
     const button = screen.getByRole('button', { name: /switch to dark/i });

@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
 import { describe, expect, it, Mock, vi } from 'vitest';
 import ThemeSelection from '.';
 import { Themes } from '../../enums';
@@ -19,11 +18,9 @@ describe('ThemeSelection', () => {
     });
 
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <ThemeSelection />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <ThemeSelection />
+      </Provider>
     );
 
     expect(screen.getByRole('combobox')).toBeInTheDocument();
@@ -38,11 +35,9 @@ describe('ThemeSelection', () => {
     });
 
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <ThemeSelection />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <ThemeSelection />
+      </Provider>
     );
 
     const select = screen.getByRole('combobox') as HTMLSelectElement;
@@ -57,11 +52,9 @@ describe('ThemeSelection', () => {
     });
 
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <ThemeSelection />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <ThemeSelection />
+      </Provider>
     );
 
     const select = screen.getByRole('combobox');

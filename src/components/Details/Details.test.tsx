@@ -1,17 +1,17 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Provider } from 'react-redux';
-import { MemoryRouter, useNavigate, useParams } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Details from '.';
 import { store } from '../../store';
 import { useGetCharacterByIdQuery } from '../../store/star-wars-api';
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('next/navigation', async () => {
+  const actual = await vi.importActual('next/navigation');
   return {
     ...actual,
-    useNavigate: vi.fn(),
-    useParams: vi.fn(),
+    useRouter: vi.fn(),
+    useSearchParams: vi.fn(),
   };
 });
 
@@ -24,7 +24,10 @@ vi.mock('../../store/star-wars-api', async () => {
 });
 
 describe('Details', () => {
-  const mockNavigate = vi.fn();
+  const mockRouter = {
+    push: vi.fn(),
+  };
+  const mockSearchParams = new URLSearchParams({ details: '1' });
   const mockUseGetCharacterByIdQuery = useGetCharacterByIdQuery as Mock;
   const mockData = {
     name: 'Luke',
@@ -36,8 +39,8 @@ describe('Details', () => {
   };
 
   beforeEach(() => {
-    (useNavigate as Mock).mockReturnValue(mockNavigate);
-    (useParams as Mock).mockReturnValue({ id: '1' });
+    (useRouter as Mock).mockReturnValue(mockRouter);
+    (useSearchParams as Mock).mockReturnValue(mockSearchParams);
     mockUseGetCharacterByIdQuery.mockReset();
   });
 
@@ -52,11 +55,9 @@ describe('Details', () => {
     });
 
     render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <Details />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Details />
+      </Provider>
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
@@ -69,11 +70,9 @@ describe('Details', () => {
     });
 
     render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <Details />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Details />
+      </Provider>
     );
 
     expect(screen.getByText(mockData.name)).toBeInTheDocument();
@@ -91,16 +90,14 @@ describe('Details', () => {
     });
 
     render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <Details />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Details />
+      </Provider>
     );
 
     const closeButton = screen.getByRole('button', { name: /✖/i });
     fireEvent.click(closeButton);
 
-    expect(mockNavigate).toHaveBeenCalledWith({ pathname: '/', search: '' });
+    expect(mockRouter.push).toHaveBeenCalledWith('/?');
   });
 });

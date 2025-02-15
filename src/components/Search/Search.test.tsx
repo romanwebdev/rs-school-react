@@ -1,8 +1,15 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Search from '.';
 import * as hooks from '../../hooks';
+
+vi.mock('next/navigation', async () => {
+  const actual = await vi.importActual('next/navigation');
+  return {
+    ...actual,
+    useRouter: vi.fn(),
+  };
+});
 
 describe('Search', () => {
   const mockUpdateSearchParams = vi.fn();
@@ -16,22 +23,14 @@ describe('Search', () => {
   it('renders with the initial query value', () => {
     mockUseQueryParams.mockReturnValue({ search: 'Luke', page: '1' });
 
-    render(
-      <BrowserRouter>
-        <Search />
-      </BrowserRouter>
-    );
+    render(<Search />);
 
     const input = screen.getByRole('textbox');
     expect(input).toHaveValue('Luke');
   });
 
   it('updates the query state when typing in the input', () => {
-    render(
-      <BrowserRouter>
-        <Search />
-      </BrowserRouter>
-    );
+    render(<Search />);
 
     const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: 'C-3PO' } });
@@ -41,11 +40,7 @@ describe('Search', () => {
   it('calls setSavedQuery and setPage when the search button is clicked', async () => {
     mockUseUpdateSearchParams.mockReturnValue(mockUpdateSearchParams);
 
-    render(
-      <BrowserRouter>
-        <Search />
-      </BrowserRouter>
-    );
+    render(<Search />);
 
     const input = screen.getByRole('textbox');
     const button = screen.getByRole('button', { name: /search/i });

@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import SelectedItems from '.';
 import charactersReducer, {
@@ -53,11 +52,9 @@ describe('SelectedItems', () => {
     } as IState);
 
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <SelectedItems />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <SelectedItems />
+      </Provider>
     );
     expect(screen.queryByText(/Selected items:/)).not.toBeInTheDocument();
   });
@@ -68,11 +65,9 @@ describe('SelectedItems', () => {
     });
 
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <SelectedItems />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <SelectedItems />
+      </Provider>
     );
     expect(screen.getByText(/Selected items: 1/)).toBeInTheDocument();
   });
@@ -84,11 +79,9 @@ describe('SelectedItems', () => {
     store.dispatch = vi.fn();
 
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <SelectedItems />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <SelectedItems />
+      </Provider>
     );
 
     const button = screen.getByText(/Unselect all/);
@@ -103,11 +96,9 @@ describe('SelectedItems', () => {
     });
 
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <SelectedItems />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <SelectedItems />
+      </Provider>
     );
 
     const button = screen.getByText(/Donwload/);

@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
 import { describe, expect, it, Mock, vi } from 'vitest';
 import CardList from '.';
+import { store } from '../../store';
 import { useGetCharactersQuery } from '../../store/star-wars-api';
 
 vi.mock('../../hooks', () => ({
@@ -10,9 +12,21 @@ vi.mock('../../hooks', () => ({
   }),
 }));
 
-vi.mock('../../store/star-wars-api', () => ({
-  useGetCharactersQuery: vi.fn(),
-}));
+vi.mock('../../store/star-wars-api', async () => {
+  const actual = await vi.importActual('../../store/star-wars-api');
+
+  return {
+    ...actual,
+    useGetCharactersQuery: vi.fn().mockReturnValue({
+      data: {
+        results: [],
+      },
+      error: null,
+      isLoading: false,
+      isSuccess: true,
+    }),
+  };
+});
 
 vi.mock('../Card', () => ({
   default: ({ character }: { character: { name: string } }) => (
@@ -31,7 +45,11 @@ describe('CardList component', () => {
       isFetching: false,
     });
 
-    render(<CardList />);
+    render(
+      <Provider store={store}>
+        <CardList />
+      </Provider>
+    );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
@@ -43,7 +61,11 @@ describe('CardList component', () => {
       isFetching: false,
     });
 
-    render(<CardList />);
+    render(
+      <Provider store={store}>
+        <CardList />
+      </Provider>
+    );
 
     expect(screen.getByText('Nothing found')).toBeInTheDocument();
   });
@@ -57,7 +79,11 @@ describe('CardList component', () => {
       isFetching: false,
     });
 
-    render(<CardList />);
+    render(
+      <Provider store={store}>
+        <CardList />
+      </Provider>
+    );
 
     expect(screen.getAllByTestId('card')).toHaveLength(2);
     expect(screen.getByText('Luke Skywalker')).toBeInTheDocument();

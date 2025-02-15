@@ -1,31 +1,66 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Provider } from 'react-redux';
-import { BrowserRouter, MemoryRouter, useNavigate } from 'react-router';
-import { afterEach, describe, expect, it, Mock, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Main from '.';
 import { store } from '../../store';
+import { useGetCharactersQuery } from '../../store/star-wars-api';
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('next/navigation', async () => {
+  const actual = await vi.importActual('next/navigation');
 
   return {
     ...actual,
-    useNavigate: vi.fn(),
+    useRouter: vi.fn(),
+    useSearchParams: vi.fn(),
+  };
+});
+
+vi.mock('../../hooks', () => ({
+  useQueryParams: () => ({
+    page: '1',
+    search: '',
+  }),
+  useUpdateSearchParams: vi.fn(),
+}));
+
+vi.mock('../../store/star-wars-api', async () => {
+  const actual = await vi.importActual('../../store/star-wars-api');
+
+  return {
+    ...actual,
+    useGetCharactersQuery: vi.fn().mockReturnValue({
+      data: {
+        results: [],
+        count: 1,
+      },
+      error: null,
+      isLoading: false,
+      isSuccess: true,
+    }),
   };
 });
 
 describe('Main', () => {
+  const mockRouter = {
+    push: vi.fn(),
+  };
+  const mockSearchParams = new URLSearchParams({ details: '1' });
+
+  beforeEach(() => {
+    (useRouter as Mock).mockReturnValue(mockRouter);
+    (useSearchParams as Mock).mockReturnValue(mockSearchParams);
+  });
+
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it('renders the title', async () => {
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <Main />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <Main />
+      </Provider>
     );
 
     const title = screen.getByText(/star wars/i);
@@ -33,12 +68,16 @@ describe('Main', () => {
   });
 
   it('renders overlay when pathname includes details', () => {
+    (useGetCharactersQuery as Mock).mockReturnValue({
+      data: { count: 50, results: [] },
+      isLoading: false,
+      isFetching: false,
+    });
+
     render(
-      <MemoryRouter initialEntries={['/details']}>
-        <Provider store={store}>
-          <Main />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Main />
+      </Provider>
     );
 
     const overlay = screen.getByTestId('overlay');
@@ -46,20 +85,21 @@ describe('Main', () => {
   });
 
   it('navigates back to the home page when overlay is clicked', () => {
-    const mockNavigate = vi.fn();
-    (useNavigate as Mock).mockReturnValue(mockNavigate);
+    (useGetCharactersQuery as Mock).mockReturnValue({
+      data: { count: 50, results: [] },
+      isLoading: false,
+      isFetching: false,
+    });
 
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <Main />
-        </Provider>
-      </BrowserRouter>
+      <Provider store={store}>
+        <Main />
+      </Provider>
     );
 
     const overlay = screen.getByTestId('overlay');
     fireEvent.click(overlay);
 
-    expect(mockNavigate).toHaveBeenCalledWith({ pathname: '/', search: '' });
+    expect(mockRouter.push).toHaveBeenCalledWith('/?');
   });
 });
