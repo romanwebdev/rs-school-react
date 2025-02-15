@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { useSearchParams } from 'next/navigation';
 import { Provider } from 'react-redux';
 import { describe, expect, it, Mock, vi } from 'vitest';
 import CardList from '.';
@@ -12,8 +13,17 @@ vi.mock('../../hooks', () => ({
   }),
 }));
 
-vi.mock('../../store/star-wars-api', async () => {
-  const actual = await vi.importActual('../../store/star-wars-api');
+vi.mock('next/navigation', async () => {
+  const actual = await vi.importActual('next/navigation');
+  return {
+    ...actual,
+    useRouter: vi.fn(),
+    useSearchParams: vi.fn(),
+  };
+});
+
+vi.mock('../../../store/star-wars-api', async () => {
+  const actual = await vi.importActual('../../../store/star-wars-api');
 
   return {
     ...actual,
@@ -44,6 +54,7 @@ describe('CardList component', () => {
       isLoading: true,
       isFetching: false,
     });
+    (useSearchParams as Mock).mockReturnValue({ get: vi.fn() });
 
     render(
       <Provider store={store}>

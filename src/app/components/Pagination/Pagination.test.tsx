@@ -6,8 +6,8 @@ import * as hooks from '../../../hooks';
 import { store } from '../../../store';
 import { useGetCharactersQuery } from '../../../store/star-wars-api';
 
-vi.mock('../../store/star-wars-api', async () => {
-  const actual = await vi.importActual('../../store/star-wars-api');
+vi.mock('../../../store/star-wars-api', async () => {
+  const actual = await vi.importActual('../../../store/star-wars-api');
 
   return {
     ...actual,

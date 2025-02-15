@@ -6,7 +6,7 @@ import { Themes } from '../../../enums';
 import { useThemeContext } from '../../../hooks';
 import { store } from '../../../store';
 
-vi.mock('../../hooks', () => ({
+vi.mock('../../../hooks', () => ({
   useThemeContext: vi.fn(),
 }));
 

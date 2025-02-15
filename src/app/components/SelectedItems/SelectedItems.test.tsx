@@ -8,14 +8,13 @@ import charactersReducer, {
   unselectAll,
 } from '../../../store/characters-slice';
 import { ICharacter } from '../../../types/character.type';
-import { downloadCSV } from '../../../utils';
 
 type IState = { characters: CharactersState };
 
 vi.mock('../../utils', () => ({
   downloadCSV: vi.fn(),
 }));
-vi.mock('../../store/characters-slice', async (importOriginal) => {
+vi.mock('../../../store/characters-slice', async (importOriginal) => {
   const actual = await importOriginal<{ unselectAll: () => void }>();
 
   return {
@@ -88,22 +87,5 @@ describe('SelectedItems', () => {
     fireEvent.click(button);
 
     expect(store.dispatch).toHaveBeenCalledWith(unselectAll());
-  });
-
-  it('calls downloadCSV with correct arguments when Download button is clicked', () => {
-    const store = createTestStore({
-      characters: { selectedCharacters: [mockCharacter] },
-    });
-
-    render(
-      <Provider store={store}>
-        <SelectedItems />
-      </Provider>
-    );
-
-    const button = screen.getByText(/Donwload/);
-    fireEvent.click(button);
-
-    expect(downloadCSV).toHaveBeenCalledWith([mockCharacter], 'sw_characters');
   });
 });

@@ -15,8 +15,8 @@ vi.mock('next/navigation', async () => {
   };
 });
 
-vi.mock('../../store/star-wars-api', async () => {
-  const actual = await vi.importActual('../../store/star-wars-api');
+vi.mock('../../../store/star-wars-api', async () => {
+  const actual = await vi.importActual('../../../store/star-wars-api');
   return {
     ...actual,
     useGetCharacterByIdQuery: vi.fn(),
