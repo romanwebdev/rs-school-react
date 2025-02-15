@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import Home from '../pages';
+import Home from '../app/page';
 import { store } from '../store';
 import { useGetCharactersQuery } from '../store/star-wars-api';
 
