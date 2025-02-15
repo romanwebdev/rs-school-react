@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router';
-import Home from '../../pages/Home';
-import NotFound from '../../pages/NotFound';
+import Home from '../../old_pages/Home';
+import NotFound from '../../old_pages/NotFound';
 import Details from '../Details';
 
 export default function Routing() {

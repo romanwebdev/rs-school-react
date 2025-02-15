@@ -25,3 +25,8 @@ dist-ssr
 
 # Tests
 coverage
+
+# Next.js
+.next
+next-env.d.ts
+dist
