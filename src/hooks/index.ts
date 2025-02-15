@@ -1,4 +1,4 @@
 export { useLocalStorage } from './useLocalStorage';
-// export { useQueryParams } from './useQueryParams';
+export { useQueryParams } from './useQueryParams';
 export { useThemeContext } from './useThemeHooks';
-// export { useUpdateSearchParams } from './useUpdateSearchParams';
+export { useUpdateSearchParams } from './useUpdateSearchParams';

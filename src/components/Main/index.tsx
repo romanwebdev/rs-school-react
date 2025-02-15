@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useSearchParams } from 'react-router';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Pagination from '../Pagination';
 import Results from '../Results';
 import Search from '../Search';
@@ -6,21 +6,19 @@ import SelectedItems from '../SelectedItems';
 import styles from './Main.module.css';
 
 export default function Main() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const currentPath =
+    typeof window !== 'undefined' ? window.location.pathname : '';
 
   function closeDetails() {
-    navigate({
-      pathname: `/`,
-      search: searchParams.toString(),
-    });
+    router.push(`/?${searchParams.toString()}`);
   }
 
   return (
     <div className={styles.main}>
       <div
-        className={`${location.pathname.includes('details') ? styles.overlay : ''}`}
+        className={`${currentPath.includes('details') ? styles.overlay : ''}`}
         data-testid="overlay"
         onClick={closeDetails}
       ></div>

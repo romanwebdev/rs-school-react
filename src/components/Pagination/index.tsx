@@ -14,6 +14,7 @@ export default function Pagination() {
     page,
     search,
   });
+
   const updateSearchParams = useUpdateSearchParams();
 
   useEffect(() => {

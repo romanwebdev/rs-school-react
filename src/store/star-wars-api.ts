@@ -10,7 +10,7 @@ type IRequest = { page: string; search: string };
 
 export const starWarsApi = createApi({
   reducerPath: 'starWarsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL }),
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_URL }),
   endpoints: (builder) => ({
     getCharacters: builder.query<IResponse, IRequest>({
       query: ({ page, search }) => `/?page=${page}&search=${search}`,

@@ -1,18 +1,17 @@
-import { useSearchParams } from 'react-router';
+import { useRouter } from 'next/navigation';
 
 export const useUpdateSearchParams = () => {
-  const [, setSearchParams] = useSearchParams();
+  const router = useRouter();
 
   const updateSearchParams = (newPage: string, search: string) => {
-    const params: { page: string; search?: string } = {
-      page: newPage.toString(),
-    };
+    const params = new URLSearchParams();
+    params.set('page', newPage);
 
     if (search) {
-      params.search = search;
+      params.set('search', search);
     }
 
-    setSearchParams(params);
+    router.push(`/?${params.toString()}`);
   };
 
   return updateSearchParams;
