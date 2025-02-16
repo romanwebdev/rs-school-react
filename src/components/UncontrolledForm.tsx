@@ -1,13 +1,25 @@
 import { useRef } from 'react';
+import { useNavigate } from 'react-router';
+import { useAppDispatch } from '../store/hooks';
+import { setData } from '../store/uncontrolledFormSlice';
+import { IData } from '../types/data.type';
 import Autocomplete from './Autocomplete';
 
 export default function UncontrolledForm() {
   const formRef = useRef(null);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log('submit', formRef.current);
+    if (formRef.current) {
+      const formData = new FormData(formRef.current);
+      const data = Object.fromEntries(formData) as unknown as IData;
+
+      dispatch(setData(data));
+      navigate('/');
+    }
   };
 
   return (
@@ -55,9 +67,9 @@ export default function UncontrolledForm() {
         <label htmlFor="terms">Accept Terms and Conditions</label>
       </div>
 
-      <div className="controller">
+      {/* <div className="controller">
         <input type="file" name="picture" />
-      </div>
+      </div> */}
 
       <button>Submit</button>
     </form>

@@ -37,12 +37,6 @@ h1 {
   line-height: 1.1;
 }
 
-nav {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-}
-
 .controller {
   display: flex;
   flex-direction: column;
@@ -97,6 +91,11 @@ input[type="checkbox"] {
   width: auto;
 }
 
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
 .checkbox-wrapper {
   display: flex;
   gap: 6px;
@@ -110,8 +109,6 @@ input[type="checkbox"] {
   max-height: 240px;
   overflow-y: auto;
   background-color: #ffffff;
-  list-style: none;
-  padding-left: 0;
   position: absolute;
   top: 69px;
   z-index: 10;
@@ -124,4 +121,16 @@ input[type="checkbox"] {
 
 .autocomplete-item:hover {
   background-color: #dbeafe;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+}
+
+.data-view {
+  border: 1px solid;
+  padding: 12px;
+  margin-top: 16px;
 }
