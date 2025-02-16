@@ -5,7 +5,7 @@ import HomeLayout from './components/HomeLayout.tsx';
 import './index.css';
 import Main from './pages/Main.tsx';
 import ReactHookForm from './pages/ReactHookForm.tsx';
-import UncontrolledForm from './pages/UncontrolledForm.tsx';
+import UncontrolledFormPage from './pages/UncontrolledFormPage.tsx';
 
 const rootElement = document.getElementById('root');
 
@@ -16,7 +16,10 @@ if (rootElement) {
         <Routes>
           <Route element={<HomeLayout />}>
             <Route path="/" element={<Main />} />
-            <Route path="/uncontrolled-form" element={<UncontrolledForm />} />
+            <Route
+              path="/uncontrolled-form"
+              element={<UncontrolledFormPage />}
+            />
             <Route path="/react-hook-form" element={<ReactHookForm />} />
           </Route>
         </Routes>
