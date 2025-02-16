@@ -1,14 +1,26 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import { BrowserRouter, Route, Routes } from 'react-router';
+import HomeLayout from './components/HomeLayout.tsx';
 import './index.css';
+import Main from './pages/Main.tsx';
+import ReactHookForm from './pages/ReactHookForm.tsx';
+import UncontrolledForm from './pages/UncontrolledForm.tsx';
 
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
-      <App />
+      <BrowserRouter>
+        <Routes>
+          <Route element={<HomeLayout />}>
+            <Route path="/" element={<Main />} />
+            <Route path="/uncontrolled-form" element={<UncontrolledForm />} />
+            <Route path="/react-hook-form" element={<ReactHookForm />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </StrictMode>
   );
 }
