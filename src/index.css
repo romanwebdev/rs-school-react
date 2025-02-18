@@ -72,11 +72,14 @@ button {
   }
 }
 
+form {
+  width: 500px;
+}
+
 .radios {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
 }
 
 .radio {
@@ -99,7 +102,6 @@ ul {
 .checkbox-wrapper {
   display: flex;
   gap: 6px;
-  margin-bottom: 10px;
 }
 
 .autocomplete-list {
@@ -133,4 +135,11 @@ ul {
   border: 1px solid;
   padding: 12px;
   margin-top: 16px;
+}
+
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 0.2em;
+  height: 3px;
 }
