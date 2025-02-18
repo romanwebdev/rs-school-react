@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import HomeLayout from './components/HomeLayout.tsx';
 import './index.css';
 import Main from './pages/Main.tsx';
-import ReactHookForm from './pages/ReactHookForm.tsx';
+import ReactHookFormPage from './pages/ReactHookFormPage.tsx';
 import UncontrolledFormPage from './pages/UncontrolledFormPage.tsx';
 import { store } from './store/index.ts';
 
@@ -23,7 +23,7 @@ if (rootElement) {
                 path="/uncontrolled-form"
                 element={<UncontrolledFormPage />}
               />
-              <Route path="/react-hook-form" element={<ReactHookForm />} />
+              <Route path="/react-hook-form" element={<ReactHookFormPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

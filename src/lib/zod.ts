@@ -8,9 +8,11 @@ export const formSchema = z
       .regex(/^[A-Z]/, 'Name should start with an uppercase letter'),
 
     age: z
-      .number()
-      .min(0, 'Age cannot be negative')
-      .int('Age must be an integer'),
+      .string()
+      .transform((val) => Number(val))
+      .refine((val) => !isNaN(val) && val > 0, {
+        message: 'Age must be a valid number and cannot be negative',
+      }),
 
     email: z.string().email('Please provide a valid email address'),
 

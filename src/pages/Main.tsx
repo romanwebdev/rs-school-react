@@ -4,7 +4,10 @@ import DataView from './../components/DataView';
 
 function Main() {
   const uncontrollerFormData = useAppSelector(
-    (state) => state.uncontrolledForm.data
+    (state) => state.formSlice.uncontrolledFormData
+  );
+  const reactHookFormData = useAppSelector(
+    (state) => state.formSlice.reactHookFormData
   );
 
   return (
@@ -18,6 +21,7 @@ function Main() {
         <h2>React Hook Form</h2>
         <div>
           <Link to="/react-hook-form">Link to Form</Link>
+          {reactHookFormData && <DataView data={reactHookFormData} />}
         </div>
       </div>
     </div>

@@ -2,8 +2,8 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { z } from 'zod';
 import { formSchema } from '../lib/zod';
+import { setUncotrolledFormData } from '../store/formSlice';
 import { useAppDispatch } from '../store/hooks';
-import { setData } from '../store/uncontrolledFormSlice';
 import { IData } from '../types/data.type';
 import Autocomplete from './Autocomplete';
 
@@ -22,14 +22,13 @@ export default function UncontrolledForm() {
       const data = Object.fromEntries(formData) as unknown as IData;
       const convertedData = {
         ...data,
-        age: Number(data.age || ''),
-        terms: Boolean(data.terms),
+        terms: Boolean(data.terms), //TODO: change for transform in zod scheme
       };
 
       try {
         formSchema.parse(convertedData);
 
-        dispatch(setData(data));
+        dispatch(setUncotrolledFormData(data));
         navigate('/');
       } catch (error) {
         if (error instanceof z.ZodError) {
