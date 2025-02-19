@@ -2,9 +2,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { z } from 'zod';
-import { formSchema } from '../lib/zod';
 import { setReactHookFormData } from '../store/formSlice';
 import { useAppDispatch } from '../store/hooks';
+import { convertToBase64 } from '../utils/convertToBase64';
+import { formSchema } from '../utils/zod';
 
 type FormData = z.infer<typeof formSchema>;
 
@@ -19,9 +20,17 @@ export default function ReactHookForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const onSubmit = (data: FormData) => {
-    dispatch(setReactHookFormData(data));
-    navigate('/');
+  const onSubmit = async (data: FormData) => {
+    const file = data.image[0];
+
+    try {
+      const base64 = await convertToBase64(file);
+
+      dispatch(setReactHookFormData({ ...data, image: base64 }));
+      navigate('/');
+    } catch (error) {
+      console.error('Failed to convert image:', error);
+    }
   };
 
   return (
@@ -90,6 +99,15 @@ export default function ReactHookForm() {
           <label htmlFor="terms">Accept Terms and Conditions</label>
         </div>
         <p className="error">{errors.terms?.message}</p>
+      </div>
+
+      <div className="controller">
+        <input
+          type="file"
+          accept="image/png, image/jpeg, image/jpg"
+          {...register('image')}
+        />
+        <p className="error">{errors.image?.message?.toString()}</p>
       </div>
 
       <button type="submit">Submit</button>

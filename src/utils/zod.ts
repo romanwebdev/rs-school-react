@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+const MAX_FILE_SIZE = 1 * 1024 * 1024;
+const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/jpg'];
+
 export const formSchema = z
   .object({
     name: z
@@ -38,6 +41,18 @@ export const formSchema = z
     terms: z.boolean().refine((val) => val === true, {
       message: 'You must accept the terms and conditions',
     }),
+
+    image: z
+      .any()
+      .refine((file) => (file?.size || file[0]?.size) > 0, 'Image is required')
+      .refine(
+        (file) => (file?.size || file[0]?.size) <= MAX_FILE_SIZE,
+        'File size must be less than 1MB'
+      )
+      .refine(
+        (file) => ALLOWED_FILE_TYPES.includes(file?.type || file[0]?.type),
+        'Only JPEG or PNG files are allowed'
+      ),
   })
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {

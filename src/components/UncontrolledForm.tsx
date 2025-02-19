@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { z } from 'zod';
-import { formSchema } from '../lib/zod';
 import { setUncotrolledFormData } from '../store/formSlice';
 import { useAppDispatch } from '../store/hooks';
 import { IData } from '../types/data.type';
+import { convertToBase64 } from '../utils/convertToBase64';
+import { formSchema } from '../utils/zod';
 import Autocomplete from './Autocomplete';
 
 export default function UncontrolledForm() {
@@ -14,7 +15,7 @@ export default function UncontrolledForm() {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (formRef.current) {
@@ -22,14 +23,18 @@ export default function UncontrolledForm() {
       const data = Object.fromEntries(formData) as unknown as IData;
       const convertedData = {
         ...data,
-        terms: Boolean(data.terms), //TODO: change for transform in zod scheme
+        terms: Boolean(data.terms),
       };
 
       try {
         formSchema.parse(convertedData);
+        const image = formData.get('image');
 
-        dispatch(setUncotrolledFormData(data));
-        navigate('/');
+        if (image) {
+          const base64 = await convertToBase64(image as File);
+          dispatch(setUncotrolledFormData({ ...convertedData, image: base64 }));
+          navigate('/');
+        }
       } catch (error) {
         if (error instanceof z.ZodError) {
           const validationErrors: { [key: string]: string } = {};
@@ -98,9 +103,14 @@ export default function UncontrolledForm() {
         <p className="error">{errors.terms}</p>
       </div>
 
-      {/* <div className="controller">
-        <input type="file" name="picture" />
-      </div> */}
+      <div className="controller">
+        <input
+          type="file"
+          name="image"
+          accept="image/png, image/jpeg, image/jpg"
+        />
+        <p className="error">{errors.image}</p>
+      </div>
 
       <button>Submit</button>
     </form>

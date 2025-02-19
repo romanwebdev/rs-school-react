@@ -3,4 +3,5 @@ export interface IData {
   age: number;
   email: string;
   terms: boolean;
+  image: string;
 }

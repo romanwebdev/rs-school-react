@@ -7,7 +7,13 @@ export default function DataView({ data }: { data: IData }) {
       <ul>
         {Object.entries(data).map((item) => (
           <li key={item[0]}>
-            <b>{item[0]}</b>: <span>{item[1]}</span>
+            {item[0] === 'image' ? (
+              <img src={item[1]} alt="Image from form" />
+            ) : (
+              <>
+                <b>{item[0]}</b>: <span>{item[1]}</span>
+              </>
+            )}
           </li>
         ))}
       </ul>
