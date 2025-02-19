@@ -82,6 +82,17 @@ export default function UncontrolledForm() {
       <Autocomplete />
 
       <div className="controller">
+        <label htmlFor="image">Image</label>
+        <input
+          type="file"
+          name="image"
+          accept="image/png, image/jpeg, image/jpg"
+          id="image"
+        />
+        <p className="error">{errors.image}</p>
+      </div>
+
+      <div className="controller">
         <div className="radios">
           <div className="radio">
             <input type="radio" name="gender" value="male" id="male" />
@@ -101,15 +112,6 @@ export default function UncontrolledForm() {
           <label htmlFor="terms">Accept Terms and Conditions</label>
         </div>
         <p className="error">{errors.terms}</p>
-      </div>
-
-      <div className="controller">
-        <input
-          type="file"
-          name="image"
-          accept="image/png, image/jpeg, image/jpg"
-        />
-        <p className="error">{errors.image}</p>
       </div>
 
       <button>Submit</button>

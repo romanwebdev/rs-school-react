@@ -1,49 +1,51 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
+import {
+  setFilteredCountries,
+  setSelectedCountries,
+} from '../store/countriesSlice';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
-const countries = [
-  'United States',
-  'Canada',
-  'Mexico',
-  'Brazil',
-  'Argentina',
-  'Germany',
-  'France',
-  'Italy',
-  'Spain',
-  'United Kingdom',
-  'China',
-  'Japan',
-  'South Korea',
-  'India',
-  'Australia',
-];
-
-export default function Autocomplete() {
-  const [filteredCountries, setFilteredCountries] = useState<string[]>([]);
+export default function MultiAutocomplete() {
+  const countries = useAppSelector((state) => state.countries.allowedCountries);
+  const selectedCountries = useAppSelector(
+    (state) => state.countries.selectedCountries
+  );
+  const filteredCountries = useAppSelector(
+    (state) => state.countries.filteredCountries
+  );
+  const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = () => {
     if (inputRef.current && inputRef.current.value) {
       const value = inputRef.current.value;
-      const filtered = countries.filter((country) =>
-        country.toLowerCase().includes(value.toLowerCase())
+      const filtered = countries.filter(
+        (country) =>
+          country.toLowerCase().includes(value.toLowerCase()) &&
+          !selectedCountries.includes(country)
       );
-      setFilteredCountries(filtered);
+      dispatch(setFilteredCountries(filtered));
     } else {
-      setFilteredCountries([]);
+      dispatch(setFilteredCountries([]));
     }
   };
 
   const handleSelect = (country: string) => {
+    dispatch(setSelectedCountries([...selectedCountries, country]));
     if (inputRef.current) {
-      inputRef.current.value = country;
+      inputRef.current.value = '';
     }
-    setFilteredCountries([]);
+    dispatch(setFilteredCountries([]));
+  };
+
+  const handleRemove = (country: string) => {
+    const filtered = selectedCountries.filter((c) => c !== country);
+    dispatch(setSelectedCountries(filtered));
   };
 
   return (
     <div className="controller">
-      <label htmlFor="country">Country</label>
+      <label htmlFor="country">Countries</label>
       <input
         id="country"
         type="text"
@@ -51,6 +53,13 @@ export default function Autocomplete() {
         onChange={handleInputChange}
         autoComplete="off"
       />
+      <div className="selected-countries">
+        {selectedCountries.map((country) => (
+          <span key={country} className="selected-item">
+            {country} <button onClick={() => handleRemove(country)}>x</button>
+          </span>
+        ))}
+      </div>
       {filteredCountries.length > 0 && (
         <ul className="autocomplete-list">
           {filteredCountries.map((country) => (

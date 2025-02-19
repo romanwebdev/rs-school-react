@@ -70,6 +70,17 @@ export default function ReactHookForm() {
       </div>
 
       <div className="controller">
+        <label htmlFor="image">Image</label>
+        <input
+          type="file"
+          accept="image/png, image/jpeg, image/jpg"
+          {...register('image')}
+          id="image"
+        />
+        <p className="error">{errors.image?.message?.toString()}</p>
+      </div>
+
+      <div className="controller">
         <div className="radios">
           <div className="radio">
             <input
@@ -99,15 +110,6 @@ export default function ReactHookForm() {
           <label htmlFor="terms">Accept Terms and Conditions</label>
         </div>
         <p className="error">{errors.terms?.message}</p>
-      </div>
-
-      <div className="controller">
-        <input
-          type="file"
-          accept="image/png, image/jpeg, image/jpg"
-          {...register('image')}
-        />
-        <p className="error">{errors.image?.message?.toString()}</p>
       </div>
 
       <button type="submit">Submit</button>
