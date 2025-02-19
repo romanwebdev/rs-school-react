@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { z } from 'zod';
 import { setUncotrolledFormData } from '../store/formSlice';
-import { useAppDispatch } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { IData } from '../types/data.type';
 import { convertToBase64 } from '../utils/convertToBase64';
 import { formSchema } from '../utils/zod';
@@ -12,6 +12,9 @@ export default function UncontrolledForm() {
   const formRef = useRef(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const countries = useAppSelector(
+    (state) => state.countries.selectedCountries
+  );
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -32,7 +35,13 @@ export default function UncontrolledForm() {
 
         if (image) {
           const base64 = await convertToBase64(image as File);
-          dispatch(setUncotrolledFormData({ ...convertedData, image: base64 }));
+          dispatch(
+            setUncotrolledFormData({
+              ...convertedData,
+              image: base64,
+              countries,
+            })
+          );
           navigate('/');
         }
       } catch (error) {

@@ -3,9 +3,10 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { z } from 'zod';
 import { setReactHookFormData } from '../store/formSlice';
-import { useAppDispatch } from '../store/hooks';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { convertToBase64 } from '../utils/convertToBase64';
 import { formSchema } from '../utils/zod';
+import Autocomplete from './Autocomplete';
 
 type FormData = z.infer<typeof formSchema>;
 
@@ -19,6 +20,9 @@ export default function ReactHookForm() {
   });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const countries = useAppSelector(
+    (state) => state.countries.selectedCountries
+  );
 
   const onSubmit = async (data: FormData) => {
     const file = data.image[0];
@@ -26,7 +30,7 @@ export default function ReactHookForm() {
     try {
       const base64 = await convertToBase64(file);
 
-      dispatch(setReactHookFormData({ ...data, image: base64 }));
+      dispatch(setReactHookFormData({ ...data, image: base64, countries }));
       navigate('/');
     } catch (error) {
       console.error('Failed to convert image:', error);
@@ -68,6 +72,8 @@ export default function ReactHookForm() {
         />
         <p className="error">{errors.confirmPassword?.message}</p>
       </div>
+
+      <Autocomplete />
 
       <div className="controller">
         <label htmlFor="image">Image</label>

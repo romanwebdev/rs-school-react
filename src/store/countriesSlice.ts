@@ -40,10 +40,14 @@ export const countriesSlice = createSlice({
     setFilteredCountries: (state, action: PayloadAction<string[]>) => {
       state.filteredCountries = action.payload;
     },
+    resetCountries: (state) => {
+      state.filteredCountries = [];
+      state.selectedCountries = [];
+    },
   },
 });
 
-export const { setSelectedCountries, setFilteredCountries } =
+export const { setSelectedCountries, setFilteredCountries, resetCountries } =
   countriesSlice.actions;
 
 export default countriesSlice.reducer;

@@ -1,4 +1,7 @@
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router';
+import { resetCountries } from '../store/countriesSlice';
 import { useAppSelector } from '../store/hooks';
 import DataView from './../components/DataView';
 
@@ -9,6 +12,11 @@ function Main() {
   const reactHookFormData = useAppSelector(
     (state) => state.form.reactHookFormData
   );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(resetCountries());
+  }, [dispatch]);
 
   return (
     <div className="main">

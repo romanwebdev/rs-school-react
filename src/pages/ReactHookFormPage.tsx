@@ -6,7 +6,6 @@ export default function ReactHookFormPage() {
     <>
       <Link to="/">Back to Main</Link>
       <h2>React Hook Form</h2>
-
       <ReactHookForm />
     </>
   );

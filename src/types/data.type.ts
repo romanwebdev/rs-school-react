@@ -4,4 +4,5 @@ export interface IData {
   email: string;
   terms: boolean;
   image: string;
+  countries: string[];
 }
