@@ -15,7 +15,6 @@ export default function UncontrolledForm() {
   const countries = useAppSelector(
     (state) => state.countries.selectedCountries
   );
-
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {

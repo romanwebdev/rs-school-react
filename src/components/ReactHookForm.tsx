@@ -23,6 +23,7 @@ export default function ReactHookForm() {
   const countries = useAppSelector(
     (state) => state.countries.selectedCountries
   );
+  const isDisable = !!Object.keys(errors).length;
 
   const onSubmit = async (data: FormData) => {
     const file = data.image[0];
@@ -118,7 +119,9 @@ export default function ReactHookForm() {
         <p className="error">{errors.terms?.message}</p>
       </div>
 
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={isDisable}>
+        Submit
+      </button>
     </form>
   );
 }
