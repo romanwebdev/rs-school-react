@@ -1,5 +1,3 @@
-import { saveAs } from 'file-saver';
-
 export function downloadCSV<T extends object>(
   selectedItems: T[],
   entityType: string
@@ -17,5 +15,10 @@ export function downloadCSV<T extends object>(
 
   const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
   const fileName = `${selectedItems.length}_${entityType}.csv`;
-  saveAs(blob, fileName);
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+
+  link.href = url;
+  link.download = fileName;
+  link.click();
 }
