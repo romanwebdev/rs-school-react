@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { z } from 'zod';
-import { setReactHookFormData } from '../store/formSlice';
+import { setHookFormUpdated, setReactHookFormData } from '../store/formSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { convertToBase64 } from '../utils/convertToBase64';
 import { formSchema } from '../utils/zod';
@@ -33,6 +33,7 @@ export default function ReactHookForm() {
 
       dispatch(setReactHookFormData({ ...data, image: base64, countries }));
       navigate('/');
+      dispatch(setHookFormUpdated());
     } catch (error) {
       console.error('Failed to convert image:', error);
     }

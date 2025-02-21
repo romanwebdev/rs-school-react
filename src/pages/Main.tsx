@@ -12,6 +12,12 @@ function Main() {
   const reactHookFormData = useAppSelector(
     (state) => state.form.reactHookFormData
   );
+  const isHookFormUpdated = useAppSelector(
+    (state) => state.form.isHookFormUpdated
+  );
+  const isUncontrolledFormUpdated = useAppSelector(
+    (state) => state.form.isUncontrolledFormUpdated
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,13 +29,20 @@ function Main() {
       <div>
         <h2>Uncontrolled Form</h2>
         <Link to="/uncontrolled-form">Link to Form</Link>
-        {uncontrollerFormData && <DataView data={uncontrollerFormData} />}
+        {uncontrollerFormData && (
+          <DataView
+            data={uncontrollerFormData}
+            isUpdated={isUncontrolledFormUpdated}
+          />
+        )}
       </div>
       <div>
         <h2>React Hook Form</h2>
         <div>
           <Link to="/react-hook-form">Link to Form</Link>
-          {reactHookFormData && <DataView data={reactHookFormData} />}
+          {reactHookFormData && (
+            <DataView data={reactHookFormData} isUpdated={isHookFormUpdated} />
+          )}
         </div>
       </div>
     </div>

@@ -1,7 +1,10 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { z } from 'zod';
-import { setUncotrolledFormData } from '../store/formSlice';
+import {
+  setUncontrolledFormUpdated,
+  setUncotrolledFormData,
+} from '../store/formSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { IData } from '../types/data.type';
 import { convertToBase64 } from '../utils/convertToBase64';
@@ -42,6 +45,7 @@ export default function UncontrolledForm() {
             })
           );
           navigate('/');
+          dispatch(setUncontrolledFormUpdated());
         }
       } catch (error) {
         if (error instanceof z.ZodError) {

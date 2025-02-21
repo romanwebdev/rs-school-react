@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { resetUpdateStatusese } from '../store/formSlice';
 import { IData } from '../types/data.type';
 
 const formatData = (key: string, value: string | string[]) => {
@@ -25,9 +28,26 @@ const formatData = (key: string, value: string | string[]) => {
   }
 };
 
-export default function DataView({ data }: { data: IData }) {
+type DataViewProps = {
+  data: IData;
+  isUpdated: boolean;
+};
+
+export default function DataView({ data, isUpdated }: DataViewProps) {
+  const [updated, setUpdated] = useState(isUpdated);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setUpdated(false);
+      dispatch(resetUpdateStatusese());
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [dispatch]);
+
   return (
-    <div className="data-view">
+    <div className={'data-view ' + (updated ? 'updated' : '')}>
       <h3>Data from form</h3>
       <ul>
         {Object.entries(data).map((item) => (

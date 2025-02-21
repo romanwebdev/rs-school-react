@@ -94,7 +94,7 @@ form {
   }
 }
 
-input[type="checkbox"] {
+input[type='checkbox'] {
   width: auto;
 }
 
@@ -139,6 +139,10 @@ ul {
   border: 1px solid;
   padding: 12px;
   margin-top: 16px;
+
+  &.updated {
+    background-color: lightgreen;
+  }
 }
 
 .error {
