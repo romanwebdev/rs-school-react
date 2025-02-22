@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import { ICountry } from '../types/country.type';
 
-export default function Card({ country }: { country: ICountry }) {
+function Card({ country }: { country: ICountry }) {
   return (
     <div className="card">
       <h2>{country.name.common}</h2>
@@ -10,3 +11,5 @@ export default function Card({ country }: { country: ICountry }) {
     </div>
   );
 }
+
+export default memo(Card);
