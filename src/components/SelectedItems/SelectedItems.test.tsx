@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { MemoryRouter } from 'react-router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import SelectedItems from '.';
 import charactersReducer, {
@@ -9,12 +9,12 @@ import charactersReducer, {
   unselectAll,
 } from '../../store/characters-slice';
 import { ICharacter } from '../../types/character.type';
-import { downloadCSV } from '../../utils';
+import { convertToCsvBlob } from '../../utils';
 
 type IState = { characters: CharactersState };
 
 vi.mock('../../utils', () => ({
-  downloadCSV: vi.fn(),
+  convertToCsvBlob: vi.fn(),
 }));
 vi.mock('../../store/characters-slice', async (importOriginal) => {
   const actual = await importOriginal<{ unselectAll: () => void }>();
@@ -24,6 +24,8 @@ vi.mock('../../store/characters-slice', async (importOriginal) => {
     unselectAll: vi.fn(),
   };
 });
+URL.createObjectURL = vi.fn(() => 'mock-url');
+vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
 
 describe('SelectedItems', () => {
   const mockCharacter: ICharacter = {
@@ -53,11 +55,11 @@ describe('SelectedItems', () => {
     } as IState);
 
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <Provider store={store}>
           <SelectedItems />
         </Provider>
-      </BrowserRouter>
+      </MemoryRouter>
     );
     expect(screen.queryByText(/Selected items:/)).not.toBeInTheDocument();
   });
@@ -68,11 +70,11 @@ describe('SelectedItems', () => {
     });
 
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <Provider store={store}>
           <SelectedItems />
         </Provider>
-      </BrowserRouter>
+      </MemoryRouter>
     );
     expect(screen.getByText(/Selected items: 1/)).toBeInTheDocument();
   });
@@ -84,11 +86,11 @@ describe('SelectedItems', () => {
     store.dispatch = vi.fn();
 
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <Provider store={store}>
           <SelectedItems />
         </Provider>
-      </BrowserRouter>
+      </MemoryRouter>
     );
 
     const button = screen.getByText(/Unselect all/);
@@ -97,22 +99,22 @@ describe('SelectedItems', () => {
     expect(store.dispatch).toHaveBeenCalledWith(unselectAll());
   });
 
-  it('calls downloadCSV with correct arguments when Download button is clicked', () => {
+  it('calls convertToCsvBlob with correct arguments when Download button is clicked', () => {
     const store = createTestStore({
       characters: { selectedCharacters: [mockCharacter] },
     });
 
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <Provider store={store}>
           <SelectedItems />
         </Provider>
-      </BrowserRouter>
+      </MemoryRouter>
     );
 
     const button = screen.getByText(/Donwload/);
     fireEvent.click(button);
 
-    expect(downloadCSV).toHaveBeenCalledWith([mockCharacter], 'sw_characters');
+    expect(convertToCsvBlob).toHaveBeenCalledWith([mockCharacter]);
   });
 });
