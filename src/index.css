@@ -109,3 +109,18 @@ main {
     clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
   }
 }
+
+.actions {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 20px;
+}
+
+select,
+input {
+  font-size: 18px;
+}
+
+input {
+  padding: 4px 8px;
+}
