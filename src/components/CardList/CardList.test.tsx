@@ -1,54 +1,66 @@
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, Mock, vi } from 'vitest';
 import CardList from '.';
-import { IPerson } from '../../types/person.type';
+import { useGetCharactersQuery } from '../../store/star-wars-api';
 
-describe('CardList', () => {
-  it('renders the specified number of cards', () => {
-    const mockData = [
-      {
-        name: 'Luke Skywalker',
-        height: '172',
-        hair_color: 'blond',
-        skin_color: 'fair',
-        eye_color: 'blue',
-        birth_year: '19BBY',
-        gender: 'male',
-        url: 'https://swapi.dev/api/people/1/',
-      },
-      {
-        name: 'C-3PO',
-        height: '167',
-        hair_color: 'n/a',
-        skin_color: 'gold',
-        eye_color: 'yellow',
-        birth_year: '112BBY',
-        gender: 'n/a',
-        url: 'https://swapi.dev/api/people/2/',
-      },
-    ];
+vi.mock('../../hooks', () => ({
+  useQueryParams: () => ({
+    page: '1',
+    search: '',
+  }),
+}));
 
-    render(
-      <BrowserRouter>
-        <CardList data={mockData} />
-      </BrowserRouter>
-    );
+vi.mock('../../store/star-wars-api', () => ({
+  useGetCharactersQuery: vi.fn(),
+}));
 
-    const cards = screen.getAllByText(/luke|c-3po/i);
-    expect(cards).toHaveLength(mockData.length);
+vi.mock('../Card', () => ({
+  default: ({ character }: { character: { name: string } }) => (
+    <div data-testid="card">{character.name}</div>
+  ),
+}));
+
+vi.mock('../Spinner', () => ({
+  default: () => <div data-testid="spinner" />,
+}));
+
+describe('CardList component', () => {
+  it('shows a loading spinner when data is loading', () => {
+    (useGetCharactersQuery as Mock).mockReturnValue({
+      isLoading: true,
+      isFetching: false,
+    });
+
+    render(<CardList />);
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
-  it('displays an appropriate message if no cards are present', () => {
-    const emptyArray: IPerson[] = [];
+  it('shows "Nothing found" when there are no results', () => {
+    (useGetCharactersQuery as Mock).mockReturnValue({
+      data: { results: [] },
+      isLoading: false,
+      isFetching: false,
+    });
 
-    render(
-      <BrowserRouter>
-        <CardList data={emptyArray} />
-      </BrowserRouter>
-    );
+    render(<CardList />);
 
-    const noDataMessage = screen.getByText('Nothing found');
-    expect(noDataMessage).toBeInTheDocument();
+    expect(screen.getByText('Nothing found')).toBeInTheDocument();
+  });
+
+  it('renders a list of characters when data is available', () => {
+    (useGetCharactersQuery as Mock).mockReturnValue({
+      data: {
+        results: [{ name: 'Luke Skywalker' }, { name: 'Darth Vader' }],
+      },
+      isLoading: false,
+      isFetching: false,
+    });
+
+    render(<CardList />);
+
+    expect(screen.getAllByTestId('card')).toHaveLength(2);
+    expect(screen.getByText('Luke Skywalker')).toBeInTheDocument();
+    expect(screen.getByText('Darth Vader')).toBeInTheDocument();
   });
 });

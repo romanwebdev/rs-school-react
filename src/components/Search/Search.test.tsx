@@ -1,25 +1,24 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Search from '.';
+import * as hooks from '../../hooks';
 
 describe('Search', () => {
-  const mockSetPage = vi.fn();
-  const mockSetSavedQuery = vi.fn();
-  const mockSavedQuery = 'Luke';
+  const mockUpdateSearchParams = vi.fn();
+  const mockUseQueryParams = vi.spyOn(hooks, 'useQueryParams');
+  const mockUseUpdateSearchParams = vi.spyOn(hooks, 'useUpdateSearchParams');
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders with the initial query value', () => {
+    mockUseQueryParams.mockReturnValue({ search: 'Luke', page: '1' });
+
     render(
       <BrowserRouter>
-        <Search
-          savedQuery={mockSavedQuery}
-          setSavedQuery={mockSetSavedQuery}
-          setPage={mockSetPage}
-        />
+        <Search />
       </BrowserRouter>
     );
 
@@ -30,11 +29,7 @@ describe('Search', () => {
   it('updates the query state when typing in the input', () => {
     render(
       <BrowserRouter>
-        <Search
-          savedQuery={mockSavedQuery}
-          setSavedQuery={mockSetSavedQuery}
-          setPage={mockSetPage}
-        />
+        <Search />
       </BrowserRouter>
     );
 
@@ -43,14 +38,12 @@ describe('Search', () => {
     expect(input).toHaveValue('C-3PO');
   });
 
-  it('calls setSavedQuery and setPage when the search button is clicked', () => {
+  it('calls setSavedQuery and setPage when the search button is clicked', async () => {
+    mockUseUpdateSearchParams.mockReturnValue(mockUpdateSearchParams);
+
     render(
       <BrowserRouter>
-        <Search
-          savedQuery={mockSavedQuery}
-          setSavedQuery={mockSetSavedQuery}
-          setPage={mockSetPage}
-        />
+        <Search />
       </BrowserRouter>
     );
 
@@ -60,7 +53,8 @@ describe('Search', () => {
     fireEvent.change(input, { target: { value: 'C-3PO' } });
     fireEvent.click(button);
 
-    expect(mockSetSavedQuery).toHaveBeenCalledWith('C-3PO');
-    expect(mockSetPage).toHaveBeenCalledWith(1);
+    await waitFor(() => {
+      expect(mockUpdateSearchParams).toHaveBeenCalledWith('1', 'C-3PO');
+    });
   });
 });

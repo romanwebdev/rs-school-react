@@ -1,13 +1,24 @@
 .main {
-  width: 100%;
   margin: 10px;
   position: relative;
+  height: 100%;
 }
 
-.detailsOpen {
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.overlay {
   position: absolute;
   top: 0;
   bottom: 0;
   right: 0;
   left: 0;
+}
+
+.selectedItemsWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }

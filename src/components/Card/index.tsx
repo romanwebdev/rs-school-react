@@ -1,30 +1,48 @@
-import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useSearchParams } from 'react-router';
+import { RootState } from '../../store';
+import { toggleCharacterSelection } from '../../store/characters-slice';
+import { ICharacter } from '../../types/character.type';
 import { getIdFromUrl } from '../../utils';
 import styles from './Card.module.css';
 
 type CardProps = {
-  name: string;
-  url: string;
+  character: ICharacter;
 };
 
-export default function Card({ name, url }: CardProps) {
+export default function Card({ character }: CardProps) {
   const navigate = useNavigate();
-
-  const id = getIdFromUrl(url);
+  const dispatch = useDispatch();
+  const characters = useSelector(
+    (state: RootState) => state.characters.selectedCharacters
+  );
+  const [searchParams] = useSearchParams();
+  const isSelected = characters.find((c) => c.name === character.name);
+  const id = getIdFromUrl(character.url);
 
   function handleClick(e: React.MouseEvent) {
     e.stopPropagation();
-    navigate(`/details/${id}`);
+
+    navigate({
+      pathname: `/details/${id}`,
+      search: searchParams.toString(),
+    });
+  }
+
+  function handleSelect(e: React.ChangeEvent) {
+    e.stopPropagation();
+    dispatch(toggleCharacterSelection(character));
   }
 
   return (
-    <button
-      className={styles.card}
-      type="button"
-      key={name}
-      onClick={handleClick}
-    >
-      <p>{name}</p>
+    <button className={styles.card} type="button" onClick={handleClick}>
+      <input
+        type="checkbox"
+        onChange={handleSelect}
+        checked={!!isSelected}
+        onClick={(event) => event.stopPropagation()}
+      />
+      <p>{character.name}</p>
     </button>
   );
 }

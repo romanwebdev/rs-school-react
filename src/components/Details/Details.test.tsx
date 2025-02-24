@@ -1,9 +1,10 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { act } from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
 import { MemoryRouter, useNavigate, useParams } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Details from '.';
-import { fetchItem } from '../../api';
+import { store } from '../../store';
+import { useGetCharacterByIdQuery } from '../../store/star-wars-api';
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -14,13 +15,17 @@ vi.mock('react-router', async () => {
   };
 });
 
-vi.mock('../../api', () => ({
-  fetchItem: vi.fn(),
-}));
+vi.mock('../../store/star-wars-api', async () => {
+  const actual = await vi.importActual('../../store/star-wars-api');
+  return {
+    ...actual,
+    useGetCharacterByIdQuery: vi.fn(),
+  };
+});
 
 describe('Details', () => {
   const mockNavigate = vi.fn();
-  const mockFetchItem = fetchItem as Mock;
+  const mockUseGetCharacterByIdQuery = useGetCharacterByIdQuery as Mock;
   const mockData = {
     name: 'Luke',
     birth_year: '2000',
@@ -33,7 +38,7 @@ describe('Details', () => {
   beforeEach(() => {
     (useNavigate as Mock).mockReturnValue(mockNavigate);
     (useParams as Mock).mockReturnValue({ id: '1' });
-    mockFetchItem.mockReset();
+    mockUseGetCharacterByIdQuery.mockReset();
   });
 
   afterEach(() => {
@@ -41,73 +46,61 @@ describe('Details', () => {
   });
 
   it('displays a loading indicator while fetching data', async () => {
-    mockFetchItem.mockResolvedValueOnce(mockData);
+    mockUseGetCharacterByIdQuery.mockReturnValue({
+      data: null,
+      isLoading: true,
+    });
 
     render(
       <MemoryRouter>
-        <Details />
+        <Provider store={store}>
+          <Details />
+        </Provider>
       </MemoryRouter>
     );
 
-    await act(async () => {
-      const spinner = await screen.findByTestId('spinner');
-      expect(spinner).toBeInTheDocument();
-    });
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
   it('renders the relevant detailed card data', async () => {
-    mockFetchItem.mockResolvedValueOnce(mockData);
+    mockUseGetCharacterByIdQuery.mockReturnValue({
+      data: mockData,
+      isLoading: false,
+    });
 
     render(
       <MemoryRouter>
-        <Details />
+        <Provider store={store}>
+          <Details />
+        </Provider>
       </MemoryRouter>
     );
 
-    await waitFor(() => expect(mockFetchItem).toHaveBeenCalledWith('1'));
-
     expect(screen.getByText(mockData.name)).toBeInTheDocument();
-    expect(screen.getByText(mockData.birth_year)).toHaveTextContent('2000');
-    expect(screen.getByText(mockData.height)).toHaveTextContent('180');
-    expect(screen.getByText(mockData.skin_color)).toHaveTextContent('fair');
-    expect(screen.getByText(mockData.eye_color)).toHaveTextContent('blue');
-    expect(screen.getByText(mockData.hair_color)).toHaveTextContent('brown');
+    expect(screen.getByText(/2000/)).toBeInTheDocument();
+    expect(screen.getByText(/180/)).toBeInTheDocument();
+    expect(screen.getByText(/fair/)).toBeInTheDocument();
+    expect(screen.getByText(/blue/)).toBeInTheDocument();
+    expect(screen.getByText(/brown/)).toBeInTheDocument();
   });
 
   it('navigates back to the home page that hides details component', async () => {
-    mockFetchItem.mockResolvedValueOnce(mockData);
+    mockUseGetCharacterByIdQuery.mockReturnValue({
+      data: mockData,
+      isLoading: false,
+    });
 
     render(
       <MemoryRouter>
-        <Details />
+        <Provider store={store}>
+          <Details />
+        </Provider>
       </MemoryRouter>
     );
 
-    await act(async () => {
-      const closeButton = screen.getByRole('button', { name: /✖/i });
-      fireEvent.click(closeButton);
-    });
+    const closeButton = screen.getByRole('button', { name: /✖/i });
+    fireEvent.click(closeButton);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/');
-  });
-
-  it('handles API errors and logs them', async () => {
-    const mockError = new Error('API error');
-    mockFetchItem.mockRejectedValueOnce(mockError);
-
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
-    render(
-      <MemoryRouter>
-        <Details />
-      </MemoryRouter>
-    );
-
-    await waitFor(() => {
-      expect(mockFetchItem).toHaveBeenCalledWith('1');
-    });
-
-    expect(consoleSpy).toHaveBeenCalledWith(mockError);
-    consoleSpy.mockRestore();
+    expect(mockNavigate).toHaveBeenCalledWith({ pathname: '/', search: '' });
   });
 });
