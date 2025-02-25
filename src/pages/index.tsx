@@ -32,7 +32,7 @@ export default function Home({
         <Header />
         <Main data={data} />
       </div>
-      {hasDetails && <Details />}
+      {hasDetails && <Details characters={data.results} />}
     </div>
   );
 }

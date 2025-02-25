@@ -1,14 +1,17 @@
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useGetCharacterByIdQuery } from '../../store/star-wars-api';
-import Spinner from '../UI/Spinner';
+import { ICharacter } from '../../types/character.type';
+import { getIdFromUrl } from '../../utils';
 import styles from './Details.module.css';
 
-export default function Details() {
+export default function Details({
+  characters = [],
+}: {
+  characters: ICharacter[];
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { data, isLoading } = useGetCharacterByIdQuery({
-    id: searchParams.get('details') ?? undefined,
-  });
+  const id = searchParams.get('details');
+  const character = characters.find((char) => getIdFromUrl(char.url) === id);
 
   function closeDetails() {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -29,31 +32,29 @@ export default function Details() {
         </button>
       </div>
       <h2 className={styles.title}>Details</h2>
-      {isLoading ? (
-        <div className={styles.spinnerWrap}>
-          <Spinner />
-        </div>
-      ) : (
+      {character ? (
         <ul>
           <li>
-            <strong>Name:</strong> {data?.name}
+            <strong>Name:</strong> {character.name}
           </li>
           <li>
-            <strong>Birth Year:</strong> {data?.birth_year}
+            <strong>Birth Year:</strong> {character.birth_year}
           </li>
           <li>
-            <strong>Height:</strong> {data?.height}
+            <strong>Height:</strong> {character.height}
           </li>
           <li>
-            <strong>Skin Color:</strong> {data?.skin_color}
+            <strong>Skin Color:</strong> {character.skin_color}
           </li>
           <li>
-            <strong>Eye Color:</strong> {data?.eye_color}
+            <strong>Eye Color:</strong> {character.eye_color}
           </li>
           <li>
-            <strong>Hair Color:</strong> {data?.hair_color}
+            <strong>Hair Color:</strong> {character.hair_color}
           </li>
         </ul>
+      ) : (
+        <p>Character Not Found</p>
       )}
     </div>
   );
