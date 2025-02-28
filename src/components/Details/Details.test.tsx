@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Details from '.';
 import { store } from '../../store';
-import { useGetCharacterByIdQuery } from '../../store/star-wars-api';
 
 vi.mock('next/navigation', async () => {
   const actual = await vi.importActual('next/navigation');
@@ -15,67 +14,41 @@ vi.mock('next/navigation', async () => {
   };
 });
 
-vi.mock('../../store/star-wars-api', async () => {
-  const actual = await vi.importActual('../../store/star-wars-api');
-  return {
-    ...actual,
-    useGetCharacterByIdQuery: vi.fn(),
-  };
-});
-
 describe('Details', () => {
   const mockRouter = {
     push: vi.fn(),
   };
   const mockSearchParams = new URLSearchParams({ details: '1' });
-  const mockUseGetCharacterByIdQuery = useGetCharacterByIdQuery as Mock;
-  const mockData = {
-    name: 'Luke',
-    birth_year: '2000',
-    height: '180',
-    skin_color: 'fair',
-    eye_color: 'blue',
-    hair_color: 'brown',
-  };
+  const mockData = [
+    {
+      name: 'Luke',
+      birth_year: '2000',
+      height: '180',
+      skin_color: 'fair',
+      eye_color: 'blue',
+      hair_color: 'brown',
+      gender: 'male',
+      url: 'https://swapi.dev/api/people/1/',
+    },
+  ];
 
   beforeEach(() => {
     (useRouter as Mock).mockReturnValue(mockRouter);
     (useSearchParams as Mock).mockReturnValue(mockSearchParams);
-    mockUseGetCharacterByIdQuery.mockReset();
   });
 
   afterEach(() => {
     vi.resetAllMocks();
   });
 
-  it('displays a loading indicator while fetching data', async () => {
-    mockUseGetCharacterByIdQuery.mockReturnValue({
-      data: null,
-      isLoading: true,
-    });
-
-    render(
-      <Provider store={store}>
-        <Details />
-      </Provider>
-    );
-
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
-  });
-
   it('renders the relevant detailed card data', async () => {
-    mockUseGetCharacterByIdQuery.mockReturnValue({
-      data: mockData,
-      isLoading: false,
-    });
-
     render(
       <Provider store={store}>
-        <Details />
+        <Details characters={mockData} />
       </Provider>
     );
 
-    expect(screen.getByText(mockData.name)).toBeInTheDocument();
+    expect(screen.getByText(mockData[0].name)).toBeInTheDocument();
     expect(screen.getByText(/2000/)).toBeInTheDocument();
     expect(screen.getByText(/180/)).toBeInTheDocument();
     expect(screen.getByText(/fair/)).toBeInTheDocument();
@@ -84,14 +57,9 @@ describe('Details', () => {
   });
 
   it('navigates back to the home page that hides details component', async () => {
-    mockUseGetCharacterByIdQuery.mockReturnValue({
-      data: mockData,
-      isLoading: false,
-    });
-
     render(
       <Provider store={store}>
-        <Details />
+        <Details characters={mockData} />
       </Provider>
     );
 
@@ -99,5 +67,19 @@ describe('Details', () => {
     fireEvent.click(closeButton);
 
     expect(mockRouter.push).toHaveBeenCalledWith('/?');
+  });
+
+  it('shows Not Found Message if characters not found', () => {
+    render(
+      <Provider store={store}>
+        <Details
+          characters={[
+            { ...mockData[0], url: 'https://swapi.dev/api/people/2/' },
+          ]}
+        />
+      </Provider>
+    );
+
+    expect(screen.getByText('Character Not Found')).toBeInTheDocument();
   });
 });

@@ -10,30 +10,18 @@ vi.mock('../../hooks', () => ({
     page: '1',
     search: '',
   }),
+  useLoader: () => ({
+    loading: false,
+    isDetailsOpen: false,
+  }),
 }));
-
-vi.mock('../../store/star-wars-api', async () => {
-  const actual = await vi.importActual('../../store/star-wars-api');
-
-  return {
-    ...actual,
-    useGetCharactersQuery: vi.fn().mockReturnValue({
-      data: {
-        results: [],
-      },
-      error: null,
-      isLoading: false,
-      isSuccess: true,
-    }),
-  };
-});
 
 describe('Results', () => {
   it('renders the title', async () => {
     await act(async () => {
       render(
         <Provider store={store}>
-          <Results />
+          <Results characters={[]} />
         </Provider>
       );
     });
