@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useQueryParams, useUpdateSearchParams } from '../../hooks';
+import { useLoader, useQueryParams, useUpdateSearchParams } from '../../hooks';
 import styles from './Pagination.module.css';
 
 const ITEMS_PER_PAGE = 10;
@@ -10,6 +10,7 @@ export default function Pagination({ count = 0 }: { count: number }) {
   const [currentPage, setCurrentPage] = useState(PAGE);
   const [pages, setPages] = useState<number[]>([]);
   const updateSearchParams = useUpdateSearchParams();
+  const { loading, isDetailsOpen } = useLoader();
 
   useEffect(() => {
     setCurrentPage(+page);
@@ -27,6 +28,8 @@ export default function Pagination({ count = 0 }: { count: number }) {
   const changePage = (newPage: number) => {
     updateSearchParams(newPage.toString(), search);
   };
+
+  if (loading && !isDetailsOpen) return null;
 
   return (
     <>

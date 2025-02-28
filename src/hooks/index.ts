@@ -1,3 +1,4 @@
+export { useLoader } from './useLoader';
 export { useLocalStorage } from './useLocalStorage';
 export { useQueryParams } from './useQueryParams';
 export { useThemeContext } from './useThemeHooks';
