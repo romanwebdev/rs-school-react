@@ -1,18 +1,30 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { useRouter } from 'next/navigation';
 import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 import Pagination from '.';
 import * as hooks from '../../../hooks';
 import { store } from '../../../store';
-import { useGetCharactersQuery } from '../../../store/star-wars-api';
 
-vi.mock('../../../store/star-wars-api', async () => {
-  const actual = await vi.importActual('../../../store/star-wars-api');
-
+vi.mock('next/navigation', async () => {
+  const actual = await vi.importActual('next/navigation');
   return {
     ...actual,
-    useGetCharactersQuery: vi.fn(),
+    useRouter: vi.fn(),
   };
+});
+
+beforeEach(() => {
+  (useRouter as Mock).mockReturnValue({
+    events: {
+      on: vi.fn(),
+      off: vi.fn(),
+    },
+  });
+});
+
+afterEach(() => {
+  vi.resetAllMocks();
 });
 
 describe('Pagination', () => {
@@ -26,12 +38,6 @@ describe('Pagination', () => {
   beforeEach(() => {
     mockUseQueryParams.mockReturnValue({ page, search });
     mockUseUpdateSearchParams.mockReturnValue(mockUpdateSearchParams);
-
-    (useGetCharactersQuery as Mock).mockReturnValue({
-      data: { count: 50, results: [] },
-      isLoading: false,
-      isFetching: false,
-    });
   });
 
   afterEach(() => {
@@ -41,7 +47,7 @@ describe('Pagination', () => {
   it('renders pagination buttons and updates the active button when clicked', async () => {
     render(
       <Provider store={store}>
-        <Pagination />
+        <Pagination count={50} />
       </Provider>
     );
 
@@ -62,7 +68,7 @@ describe('Pagination', () => {
   it('disables the button of the current page and marks it as active', async () => {
     render(
       <Provider store={store}>
-        <Pagination />
+        <Pagination count={20} />
       </Provider>
     );
 
@@ -76,15 +82,9 @@ describe('Pagination', () => {
   });
 
   it('does not render pagination buttons when data is loading or fetching', async () => {
-    (useGetCharactersQuery as Mock).mockReturnValue({
-      data: { count: 50 },
-      isLoading: true,
-      isFetching: true,
-    });
-
     render(
       <Provider store={store}>
-        <Pagination />
+        <Pagination count={0} />
       </Provider>
     );
 
@@ -95,7 +95,7 @@ describe('Pagination', () => {
   it('updates the page correctly when the user clicks a page button', async () => {
     render(
       <Provider store={store}>
-        <Pagination />
+        <Pagination count={30} />
       </Provider>
     );
 
