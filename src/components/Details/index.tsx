@@ -9,7 +9,7 @@ export async function loader({ params }: { params: { id: string } }) {
   return json;
 }
 
-export default function Details({ loaderData }: { loaderData: ICharacter }) {
+export default function Details({ loaderData }: { loaderData?: ICharacter }) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
