@@ -1,11 +1,4 @@
-import { saveAs } from 'file-saver';
-
-export function downloadCSV<T extends object>(
-  selectedItems: T[],
-  entityType: string
-): void {
-  if (!selectedItems.length) return;
-
+export function convertToCsvBlob<T extends object>(selectedItems: T[]): Blob {
   const headers = Object.keys(selectedItems[0]);
   const csvRows = [
     headers.join(','),
@@ -14,8 +7,7 @@ export function downloadCSV<T extends object>(
     ),
   ];
   const csvString = csvRows.join('\n');
-
   const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-  const fileName = `${selectedItems.length}_${entityType}.csv`;
-  saveAs(blob, fileName);
+
+  return blob;
 }

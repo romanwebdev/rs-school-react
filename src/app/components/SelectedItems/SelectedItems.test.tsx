@@ -8,11 +8,12 @@ import charactersReducer, {
   unselectAll,
 } from '../../../store/characters-slice';
 import { ICharacter } from '../../../types/character.type';
+import { convertToCsvBlob } from '../../../utils';
 
 type IState = { characters: CharactersState };
 
-vi.mock('../../utils', () => ({
-  downloadCSV: vi.fn(),
+vi.mock('../../../utils', () => ({
+  convertToCsvBlob: vi.fn(),
 }));
 vi.mock('../../../store/characters-slice', async (importOriginal) => {
   const actual = await importOriginal<{ unselectAll: () => void }>();
@@ -22,6 +23,8 @@ vi.mock('../../../store/characters-slice', async (importOriginal) => {
     unselectAll: vi.fn(),
   };
 });
+URL.createObjectURL = vi.fn(() => 'mock-url');
+vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
 
 describe('SelectedItems', () => {
   const mockCharacter: ICharacter = {
@@ -87,5 +90,22 @@ describe('SelectedItems', () => {
     fireEvent.click(button);
 
     expect(store.dispatch).toHaveBeenCalledWith(unselectAll());
+  });
+
+  it('calls convertToCsvBlob with correct arguments when Download button is clicked', () => {
+    const store = createTestStore({
+      characters: { selectedCharacters: [mockCharacter] },
+    });
+
+    render(
+      <Provider store={store}>
+        <SelectedItems />
+      </Provider>
+    );
+
+    const button = screen.getByText(/Donwload/);
+    fireEvent.click(button);
+
+    expect(convertToCsvBlob).toHaveBeenCalledWith([mockCharacter]);
   });
 });
