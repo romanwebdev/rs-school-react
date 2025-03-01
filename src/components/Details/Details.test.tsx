@@ -1,31 +1,22 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { MemoryRouter, useNavigate, useParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it, Mock, vi } from 'vitest';
-import Details from '.';
+import Details, { loader } from '.';
 import { store } from '../../store';
-import { useGetCharacterByIdQuery } from '../../store/star-wars-api';
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useNavigate: vi.fn(),
-    useParams: vi.fn(),
-  };
-});
-
-vi.mock('../../store/star-wars-api', async () => {
-  const actual = await vi.importActual('../../store/star-wars-api');
-  return {
-    ...actual,
-    useGetCharacterByIdQuery: vi.fn(),
+    useSearchParams: vi.fn(),
   };
 });
 
 describe('Details', () => {
-  const mockNavigate = vi.fn();
-  const mockUseGetCharacterByIdQuery = useGetCharacterByIdQuery as Mock;
+  const mockRouter = vi.fn();
+  const mockSearchParams = new URLSearchParams({ details: '1' });
   const mockData = {
     name: 'Luke',
     birth_year: '2000',
@@ -33,47 +24,24 @@ describe('Details', () => {
     skin_color: 'fair',
     eye_color: 'blue',
     hair_color: 'brown',
+    gender: 'male',
+    url: 'https://swapi.dev/api/people/1/',
   };
 
   beforeEach(() => {
-    (useNavigate as Mock).mockReturnValue(mockNavigate);
-    (useParams as Mock).mockReturnValue({ id: '1' });
-    mockUseGetCharacterByIdQuery.mockReset();
+    (useNavigate as Mock).mockReturnValue(mockRouter);
+    (useSearchParams as Mock).mockReturnValue(mockSearchParams);
   });
 
   afterEach(() => {
     vi.resetAllMocks();
   });
 
-  it('displays a loading indicator while fetching data', async () => {
-    mockUseGetCharacterByIdQuery.mockReturnValue({
-      data: null,
-      isLoading: true,
-    });
-
-    render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <Details />
-        </Provider>
-      </MemoryRouter>
-    );
-
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
-  });
-
   it('renders the relevant detailed card data', async () => {
-    mockUseGetCharacterByIdQuery.mockReturnValue({
-      data: mockData,
-      isLoading: false,
-    });
-
     render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <Details />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Details loaderData={mockData} />
+      </Provider>
     );
 
     expect(screen.getByText(mockData.name)).toBeInTheDocument();
@@ -85,22 +53,42 @@ describe('Details', () => {
   });
 
   it('navigates back to the home page that hides details component', async () => {
-    mockUseGetCharacterByIdQuery.mockReturnValue({
-      data: mockData,
-      isLoading: false,
-    });
-
     render(
-      <MemoryRouter>
-        <Provider store={store}>
-          <Details />
-        </Provider>
-      </MemoryRouter>
+      <Provider store={store}>
+        <Details loaderData={mockData} />
+      </Provider>
     );
 
     const closeButton = screen.getByRole('button', { name: /✖/i });
     fireEvent.click(closeButton);
 
-    expect(mockNavigate).toHaveBeenCalledWith({ pathname: '/', search: '' });
+    expect(mockRouter).toHaveBeenCalledWith({
+      pathname: `/`,
+      search: 'details,1',
+    });
+  });
+
+  it('shows Not Found Message if characters not found', () => {
+    render(
+      <Provider store={store}>
+        <Details />
+      </Provider>
+    );
+
+    expect(screen.getByText('Character Not Found')).toBeInTheDocument();
+  });
+
+  it('should fetch and return data correctly', async () => {
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(mockData),
+      })
+    ) as unknown as typeof fetch;
+
+    const params = { params: { id: '1' } };
+    const result = await loader(params);
+
+    expect(fetch).toHaveBeenCalledWith(`${import.meta.env.VITE_API_URL}/1`);
+    expect(result).toEqual(mockData);
   });
 });

@@ -1,13 +1,19 @@
-import { useNavigate, useParams, useSearchParams } from 'react-router';
-import { useGetCharacterByIdQuery } from '../../store/star-wars-api';
-import Spinner from '../UI/Spinner';
+import { useNavigate, useSearchParams } from 'react-router';
+import { ICharacter } from '../../types/character.type';
 import styles from './Details.module.css';
 
-export default function Details() {
+export async function loader({ params }: { params: { id: string } }) {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/${params.id}`);
+  const json = await response.json();
+
+  return json;
+}
+
+export default function Details({ loaderData }: { loaderData?: ICharacter }) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const params = useParams();
-  const { data, isLoading } = useGetCharacterByIdQuery({ id: params.id });
+
+  if (!loaderData) return <p>Character Not Found</p>;
 
   function closeDetails() {
     navigate({
@@ -28,32 +34,27 @@ export default function Details() {
         </button>
       </div>
       <h2 className={styles.title}>Details</h2>
-      {isLoading ? (
-        <div className={styles.spinnerWrap}>
-          <Spinner />
-        </div>
-      ) : (
-        <ul>
-          <li>
-            <strong>Name:</strong> {data?.name}
-          </li>
-          <li>
-            <strong>Birth Year:</strong> {data?.birth_year}
-          </li>
-          <li>
-            <strong>Height:</strong> {data?.height}
-          </li>
-          <li>
-            <strong>Skin Color:</strong> {data?.skin_color}
-          </li>
-          <li>
-            <strong>Eye Color:</strong> {data?.eye_color}
-          </li>
-          <li>
-            <strong>Hair Color:</strong> {data?.hair_color}
-          </li>
-        </ul>
-      )}
+
+      <ul>
+        <li>
+          <strong>Name:</strong> {loaderData?.name}
+        </li>
+        <li>
+          <strong>Birth Year:</strong> {loaderData?.birth_year}
+        </li>
+        <li>
+          <strong>Height:</strong> {loaderData?.height}
+        </li>
+        <li>
+          <strong>Skin Color:</strong> {loaderData?.skin_color}
+        </li>
+        <li>
+          <strong>Eye Color:</strong> {loaderData?.eye_color}
+        </li>
+        <li>
+          <strong>Hair Color:</strong> {loaderData?.hair_color}
+        </li>
+      </ul>
     </div>
   );
 }
