@@ -5,7 +5,13 @@ import {
 } from '../store/countriesSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
-export default function MultiAutocomplete() {
+type Props = {
+  errors: {
+    [key: string]: string;
+  };
+};
+
+export default function UncontrolledAutocomplete({ errors }: Props) {
   const countries = useAppSelector((state) => state.countries.allowedCountries);
   const selectedCountries = useAppSelector(
     (state) => state.countries.selectedCountries
@@ -45,14 +51,17 @@ export default function MultiAutocomplete() {
 
   return (
     <div className="controller">
-      <label htmlFor="country">Countries</label>
+      <label htmlFor="countries">Countries</label>
       <input
-        id="country"
+        id="countries"
         type="text"
         ref={inputRef}
         onChange={handleInputChange}
         autoComplete="off"
       />
+      {errors.countries && (
+        <p className="error autocomplete-error">{errors.countries}</p>
+      )}
       <div className="selected-countries">
         {selectedCountries.map((country) => (
           <span key={country} className="selected-item">

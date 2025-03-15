@@ -53,6 +53,10 @@ export const formSchema = z
         (file) => ALLOWED_FILE_TYPES.includes(file?.type || file[0]?.type),
         'Only JPEG or PNG files are allowed'
       ),
+
+    countries: z
+      .array(z.string())
+      .min(1, 'At least one country must be selected'),
   })
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {

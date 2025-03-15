@@ -150,6 +150,10 @@ ul {
   font-size: 0.9em;
   margin-top: 0.2em;
   height: 3px;
+
+  &.autocomplete-error {
+    height: 8px;
+  }
 }
 
 img {

@@ -6,7 +6,7 @@ import { setHookFormUpdated, setReactHookFormData } from '../store/formSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { convertToBase64 } from '../utils/convertToBase64';
 import { formSchema } from '../utils/zod';
-import Autocomplete from './Autocomplete';
+import Autocomplete from './ReactHookAutocomplete';
 
 type FormData = z.infer<typeof formSchema>;
 
@@ -15,8 +15,10 @@ export default function ReactHookForm() {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    defaultValues: { countries: [] },
   });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -75,7 +77,7 @@ export default function ReactHookForm() {
         <p className="error">{errors.confirmPassword?.message}</p>
       </div>
 
-      <Autocomplete />
+      <Autocomplete control={control} errors={errors} />
 
       <div className="controller">
         <label htmlFor="image">Image</label>

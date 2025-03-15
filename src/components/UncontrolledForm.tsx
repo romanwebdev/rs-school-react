@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { IData } from '../types/data.type';
 import { convertToBase64 } from '../utils/convertToBase64';
 import { formSchema } from '../utils/zod';
-import Autocomplete from './Autocomplete';
+import Autocomplete from './UncontrolledAutocomplete';
 
 export default function UncontrolledForm() {
   const formRef = useRef(null);
@@ -29,6 +29,7 @@ export default function UncontrolledForm() {
       const convertedData = {
         ...data,
         terms: Boolean(data.terms),
+        countries,
       };
 
       try {
@@ -91,7 +92,7 @@ export default function UncontrolledForm() {
         <p className="error">{errors.confirmPassword}</p>
       </div>
 
-      <Autocomplete />
+      <Autocomplete errors={errors} />
 
       <div className="controller">
         <label htmlFor="image">Image</label>
