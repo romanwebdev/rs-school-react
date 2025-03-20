@@ -1,16 +1,14 @@
 import { useState } from 'react';
 import { ActionsContext } from '.';
-
-const DEFAULT_REGION = 'All';
-const DEFAULT_SORT_TYPE = 'asc';
+import { Region, SortType } from '../enums';
 
 export default function ActionsProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [region, setRegion] = useState(DEFAULT_REGION);
-  const [sortType, setSortType] = useState(DEFAULT_SORT_TYPE);
+  const [region, setRegion] = useState(Region.All);
+  const [sortType, setSortType] = useState(SortType.ASC);
   const [search, setSearch] = useState('');
 
   return (

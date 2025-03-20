@@ -1,3 +1,4 @@
+import { Region, SortType } from '../enums';
 import { ICountry } from '../types/country.type';
 
 export const filterCountries = (
@@ -8,7 +9,7 @@ export const filterCountries = (
 ) => {
   let filteredCountries = countries;
 
-  if (region !== 'All') {
+  if (region !== Region.All) {
     filteredCountries = filteredCountries.filter(
       (country) => country.region === region
     );
@@ -21,7 +22,7 @@ export const filterCountries = (
   }
 
   filteredCountries = filteredCountries.sort((a, b) =>
-    sortType === 'asc'
+    sortType === SortType.ASC
       ? a.population - b.population
       : b.population - a.population
   );

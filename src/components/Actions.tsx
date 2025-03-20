@@ -1,16 +1,7 @@
 import { useCallback, useContext } from 'react';
 import { ActionsContext } from '../context';
-
-const regions = [
-  'All',
-  'Antarctic',
-  'Americas',
-  'Europe',
-  'Africa',
-  'Asia',
-  'Oceania',
-];
-const sortOptions = ['asc', 'desc'];
+import { regions, sortOptions } from '../data';
+import { Region, SortType } from '../enums';
 
 export default function Actions() {
   const { setRegion, setSortType, setSearch, search } =
@@ -18,13 +9,13 @@ export default function Actions() {
 
   const filterByRegion = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) =>
-      setRegion(event.target.value),
+      setRegion(event.target.value as Region),
     [setRegion]
   );
 
   const sortByPopulation = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) =>
-      setSortType(event.target.value),
+      setSortType(event.target.value as SortType),
     [setSortType]
   );
 

@@ -1,18 +1,19 @@
 import { createContext } from 'react';
+import { Region, SortType } from '../enums';
 
 interface ActionsContextType {
-  region: string;
-  setRegion: React.Dispatch<React.SetStateAction<string>>;
-  sortType: string;
-  setSortType: React.Dispatch<React.SetStateAction<string>>;
+  region: Region;
+  setRegion: React.Dispatch<React.SetStateAction<Region>>;
+  sortType: SortType;
+  setSortType: React.Dispatch<React.SetStateAction<SortType>>;
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const ActionsContext = createContext<ActionsContextType>({
-  region: '',
+  region: Region.All,
   setRegion: () => {},
-  sortType: '',
+  sortType: SortType.ASC,
   setSortType: () => {},
   search: '',
   setSearch: () => {},
