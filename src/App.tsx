@@ -1,21 +1,19 @@
-import { useCallback, useState } from 'react';
-import { Outlet } from 'react-router';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router';
 import './App.css';
-import Main from './components/Main';
-import { IPerson } from './types/person.type';
+import Routing from './components/Routing';
+import { ThemeProvider } from './context';
+import { store } from './store';
 
 function App() {
-  const [data, setData] = useState<IPerson[]>([]);
-
-  const handleSetData = useCallback((data: IPerson[]) => {
-    setData(data);
-  }, []);
-
   return (
-    <div className="app">
-      <Main data={data} setData={handleSetData} />
-      <Outlet />
-    </div>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Provider store={store}>
+          <Routing />
+        </Provider>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

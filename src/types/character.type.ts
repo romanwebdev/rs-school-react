@@ -1,4 +1,4 @@
-export interface IPerson {
+export interface ICharacter {
   name: string;
   height: string;
   hair_color: string;
