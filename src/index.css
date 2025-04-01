@@ -59,7 +59,7 @@ main {
   animation: rotate 1s linear infinite;
 }
 .loader::before {
-  content: "";
+  content: '';
   box-sizing: border-box;
   position: absolute;
   inset: 0px;
@@ -110,4 +110,8 @@ input {
 .highlight {
   box-shadow: 0 0 5px 5px plum;
   background: lightpink;
+}
+
+.flag {
+  width: 50%;
 }

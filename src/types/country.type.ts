@@ -2,6 +2,7 @@ export interface ICountry {
   name: IName;
   population: number;
   region: string;
+  flags: IFlag;
   flag: string;
 }
 
@@ -18,4 +19,8 @@ export interface INativeName {
 export interface Eng {
   official: string;
   common: string;
+}
+
+interface IFlag {
+  svg: string;
 }

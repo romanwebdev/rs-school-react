@@ -34,11 +34,15 @@ export default function Actions() {
           </option>
         ))}
       </select>
-      <input onChange={searchByName} value={search} placeholder="Search..." />
+      <input
+        onChange={searchByName}
+        value={search}
+        placeholder="Search by country name..."
+      />
       <select name="sorting" onChange={sortByPopulation}>
         {sortOptions.map((sort) => (
-          <option value={sort} key={sort}>
-            {sort}
+          <option value={sort.value} key={sort.value}>
+            {sort.label}
           </option>
         ))}
       </select>

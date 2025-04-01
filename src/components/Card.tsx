@@ -7,10 +7,10 @@ function Card({ country }: { country: ICountry }) {
 
   return (
     <div className={'card ' + higlightClass} onClick={toggleVisitStatus}>
+      <img src={country.flags.svg} className="flag" />
       <h2>{country.name.common}</h2>
       <p>Population: {country.population}</p>
       <p>Region: {country.region}</p>
-      <p>Flag: {country.flag}</p>
     </div>
   );
 }

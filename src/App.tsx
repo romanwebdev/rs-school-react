@@ -8,7 +8,7 @@ function App() {
 
   return (
     <main>
-      <h1>Performance App</h1>
+      <h1>Countries App</h1>
       <Actions />
       {isLoading ? <Spinner /> : <Cards countries={countries} />}
     </main>

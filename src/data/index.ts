@@ -10,4 +10,14 @@ export const regions = [
   Region.Oceania,
 ];
 
-export const sortOptions = [SortType.ASC, SortType.DESC];
+export const sortOptions = [
+  {
+    label: 'Sort by population (low to high)',
+    value: SortType.ASC,
+  },
+
+  {
+    label: 'Sort by population (high to low)',
+    value: SortType.DESC,
+  },
+];
